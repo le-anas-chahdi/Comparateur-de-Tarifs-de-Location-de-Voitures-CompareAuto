@@ -1,11 +1,11 @@
 /* Chacun ajoute son nom ici */
-/* Auteurs : ... et Anas Chahdi */
+/* Auteurs : ... et ... */
 
 #include <stdio.h>
 
 int main (void) {
 	/* Oups, on a oublié le \n final. */
-	printf("Hello, world\n");
+	printf("Hello, world");
 
 	printf("Je calcule la réponse ... ");
 	
