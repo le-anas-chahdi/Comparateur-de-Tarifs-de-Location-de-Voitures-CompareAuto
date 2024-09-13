@@ -1,5 +1,5 @@
 /* Chacun ajoute son nom ici */
-/* Auteurs : Leticia et ... */
+/* Auteurs : ... et ... */
 
 #include <stdio.h>
 
