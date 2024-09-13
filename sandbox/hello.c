@@ -13,3 +13,4 @@ int main (void) {
 	   plutôt %d */
 	printf("La réponse est %n\n", 42);
 }
+
