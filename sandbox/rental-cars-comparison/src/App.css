@@ -1,39 +1,12 @@
-.container {
-  padding: 20px;
-  font-family: Arial, sans-serif;
+
+.Map-container {
+  height: 300px; /* Définissez la hauteur souhaitée pour la carte */
+  width: 100%; /* La largeur peut être 100% ou définie à une autre valeur */
 }
 
-h1 {
-  color: #333;
-}
-
-h2 {
-  margin-top: 30px;
-  color: #555;
-}
-
-h3 {
-  margin: 10px 0;
-}
-
-.loading-text {
-  font-style: italic;
-  color: #888;
-}
-
-table {
-  margin-top: 20px;
-  border-collapse: collapse;
-  width: 100%;
-}
-
-th, td {
-  border: 1px solid #61dafb;
-  padding: 8px;
-  text-align: left;
-}
-
-th {
-  background-color: #61dafb;
-  color: white;
+/* Optionnel : styles pour rendre la carte responsive */
+@media (max-width: 600px) {
+  .Map-container {
+    height: 300px; /* Ajustez la hauteur pour les petits écrans */
+  }
 }
