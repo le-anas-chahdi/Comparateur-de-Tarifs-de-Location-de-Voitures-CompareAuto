@@ -1,0 +1,37 @@
+.about-us {
+  padding: 50px 20px;
+  text-align: center;
+  background-color: #f7f7f7;
+  max-width: 1000px; /* Limite la largeur pour un meilleur alignement */
+  margin: 0 auto; /* Centrer le contenu */
+  border-radius: 8px; /* Ajoute des coins arrondis */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Légère ombre pour plus de profondeur */
+}
+
+.about-us h1 {
+  font-size: 2.5em;
+  margin-bottom: 30px;
+  color: #333; /* Couleur de texte plus foncée pour un meilleur contraste */
+}
+
+.about-section {
+  margin: 30px 0; /* Augmenté pour plus d'espacement */
+  padding: 20px; /* Ajoute du padding pour rendre les sections plus aérées */
+  background-color: #fff; /* Ajoute un fond blanc pour les sections */
+  border-radius: 8px; /* Coins arrondis pour les sections */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Légère ombre pour les sections */
+}
+
+.about-section h2 {
+  font-size: 2em;
+  margin-bottom: 15px;
+  color: #444; /* Légèrement plus foncé que le texte pour le différencier */
+}
+
+.about-section p {
+  font-size: 1.1em; /* Réduit légèrement pour un meilleur équilibre */
+  color: #666; /* Teinte de gris pour une meilleure lisibilité */
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
