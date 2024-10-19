@@ -1,0 +1,117 @@
+import React, { useEffect, useState } from 'react';
+import { auth, db } from './firebase'; // Assurez-vous d'importer auth et db (Firestore)
+import { doc, getDoc, setDoc } from 'firebase/firestore'; // Importez setDoc pour mettre à jour les informations
+import './PersonalInfo.css'; // Assurez-vous d'importer le CSS
+
+const PersonalInfo = () => {
+    const [userInfo, setUserInfo] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [editMode, setEditMode] = useState(false);
+    const [formData, setFormData] = useState({
+        nom: '',
+        prenom: '',
+        adresse: '',
+    });
+
+    useEffect(() => {
+        const user = auth.currentUser;
+        if (user) {
+            const fetchUserInfo = async () => {
+                const docRef = doc(db, 'users', user.uid);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    setUserInfo(docSnap.data());
+                    setFormData(docSnap.data()); // Remplir le formulaire avec les données existantes
+                } else {
+                    console.log("Aucun document trouvé pour cet utilisateur !");
+                }
+                setLoading(false);
+            };
+            fetchUserInfo();
+        } else {
+            setLoading(false);
+        }
+    }, []);
+
+    const handleEditClick = () => {
+        setEditMode(true);
+    };
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const user = auth.currentUser;
+
+        // Mettre à jour les informations dans Firestore
+        await setDoc(doc(db, 'users', user.uid), formData);
+        setUserInfo(formData);
+        setEditMode(false); // Désactiver le mode édition
+    };
+
+    if (loading) {
+        return <div>Chargement des informations...</div>;
+    }
+
+    return (
+        <div className="personal-info-container">
+            <h2>Informations Personnelles</h2>
+            {userInfo ? (
+                <div className="personal-info">
+                    {editMode ? (
+                        <form onSubmit={handleSubmit}>
+                            <label>
+                                <strong>Nom :</strong>
+                                <input
+                                    type="text"
+                                    name="nom"
+                                    value={formData.nom}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </label>
+                            <label>
+                                <strong>Prénom :</strong>
+                                <input
+                                    type="text"
+                                    name="prenom"
+                                    value={formData.prenom}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </label>
+                            <label>
+                                <strong>Adresse :</strong>
+                                <input
+                                    type="text"
+                                    name="adresse"
+                                    value={formData.adresse}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </label>
+                            <button type="submit">Enregistrer les modifications</button>
+                        </form>
+                    ) : (
+                        <div>
+                            <p><strong>Nom :</strong> {userInfo.nom}</p>
+                            <p><strong>Prénom :</strong> {userInfo.prenom}</p>
+                            <p><strong>Adresse :</strong> {userInfo.adresse}</p>
+                            <p><strong>Email :</strong> {auth.currentUser.email}</p>
+                            <button onClick={handleEditClick}>Modifier mes informations</button>
+                        </div>
+                    )}
+                </div>
+            ) : (
+                <p>Aucun utilisateur connecté.</p>
+            )}
+        </div>
+    );
+};
+
+export default PersonalInfo;

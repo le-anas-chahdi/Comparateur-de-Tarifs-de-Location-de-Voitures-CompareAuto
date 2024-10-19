@@ -61,7 +61,7 @@ export const subscriptionPricing = (carType, durationInMinutes, kilometers) => {
 
     const durationInHours = durationInMinutes / 60; // Convert minutes to hours
     const durationInDays = durationInMinutes / 1440; // Convert minutes to days
-    const durationInWeeks = durationInMinutes / 10080; // Convert minutes to weeks
+    //const durationInWeeks = durationInMinutes / 10080; // Convert minutes to weeks
 
     // If the duration is less than a day
     if (durationInHours < 24) {

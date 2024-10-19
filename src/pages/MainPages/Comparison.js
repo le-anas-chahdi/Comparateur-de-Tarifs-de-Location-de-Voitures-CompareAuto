@@ -1,6 +1,6 @@
 import React from 'react';
-import Navbar from '../components/Navbar';
-import ComparisonForm from '../components/ComparisonForm';
+import Navbar from '../../components/Navbar';
+import ComparisonForm from '../../components/ComparisonForm';
 
 const Comparison = () => {
   return (

@@ -1,0 +1,122 @@
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #d8a2a2;
+    border: 1px solid #926161;
+    border-radius: 10px;
+    max-width: 600px;
+    margin: auto;
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.menu-icon {
+    cursor: pointer;
+}
+
+.profile-icons i {
+    margin-left: 25px;
+    cursor: pointer;
+}
+
+.profile-menu {
+    background-color: #d3baba; /* Couleur de fond du menu */
+    border: 1px solid #ccc; /* Bordure du menu */
+    border-radius: 5px;
+    margin-top: 5px;
+    padding: 5px;
+    position:fixed; /* Positionner le menu */
+    nav-index: auto;
+    width: 300px; /* Largeur du menu */
+}
+
+.menu-item {
+    padding: 8px 10px;
+}
+
+.menu-item a {
+    text-decoration: none;
+    color: #3f3d3d; /* Couleur du texte */
+}
+
+.menu-item a:hover {
+    color: #0c0c0c; /* Couleur lors du survol */
+}
+
+.profile-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.profile-photo img {
+    width: 100px; /* Taille de la photo de profil */
+    height: 100px;
+    border-radius: 50%; /* Rendre l'image ronde */
+    margin-bottom: 10px;
+}
+
+.user-info {
+    text-align: center;
+}
+
+.user-email {
+    color: #130404; /* Couleur pour l'email */
+}
+
+.profile-actions {
+    margin-top: 20px;
+}
+
+.action-button {
+    padding: 10px 15px;
+    background-color: #9c0101; /* Couleur du bouton */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.action-button:hover {
+    background-color: #a01208; /* Couleur au survol */
+}
+.profile-photo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-photo img {
+    width: 100px; /* Taille de la photo de profil */
+    height: 100px;
+    border-radius: 50%; /* Rendre l'image ronde */
+    margin-bottom: 10px;
+}
+
+.upload-button {
+    display: none; /* Cacher l'input par défaut */
+}
+
+.custom-upload-button {
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: #a70808; /* Couleur du bouton */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.custom-upload-button:hover {
+    background-color: #7e91a7; /* Couleur au survol */
+}
+

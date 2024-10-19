@@ -1,6 +1,5 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
-import ComparisonForm from '../components/Contact';
 import Contact from '../components/Contact';
 
 const ContactPage = () => {
