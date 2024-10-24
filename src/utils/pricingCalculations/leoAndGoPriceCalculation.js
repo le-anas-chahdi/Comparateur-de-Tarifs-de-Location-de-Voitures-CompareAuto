@@ -1,4 +1,4 @@
-import leoAndGoPricing from './leoAndGoPricing';
+import leoAndGoPricing from '../../data/leoAndGoPricing';
 
 // Function to calculate the total cost for Leo&Go
 export const leoAndGoPricingCalculation = (carType, durationInMinutes, kilometers) => {

@@ -1,6 +1,6 @@
 // src/ChangePassword.js
 import React, { useState } from 'react';
-import { auth } from '../../firebaseConfig'; // Assurez-vous d'importer l'auth
+import { auth } from '../../config/firebaseConfig'; // Assurez-vous d'importer l'auth
 
 const ChangePassword = () => {
     const [newPassword, setNewPassword] = useState('');

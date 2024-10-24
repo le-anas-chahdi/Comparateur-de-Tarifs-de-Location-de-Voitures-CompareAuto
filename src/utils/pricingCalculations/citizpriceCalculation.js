@@ -1,4 +1,4 @@
-import citizPricing from './citizPricing';
+import citizPricing from '../../data/citizPricing';
 
 // List of car types not offered by Citiz
 const unavailableCarTypes = ['utilityVehicles3m3', 'teslaCars', 'airportCars'];

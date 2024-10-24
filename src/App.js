@@ -1,15 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';  // Import Router components
-import WelcomePage from './pages/MainPages/WelcomePage';
-import Comparison from './pages/MainPages/Comparison';
-import CommentCaMarchePage from './pages/MainPages/CommentCaMarchePage';
-import AboutUsPage from './pages/MainPages/AboutUsPage';
-import Contact from './components/Contact';
-import SignUp from './pages/usersAccount/SignUp';
-import Auth from './pages/usersAccount/Auth';
-import Profile from './pages/usersAccount/Profile';
-import ChangePassword from './pages/usersAccount/ChangePassword';
-import Reservations from './pages/usersAccount/Reservations';
+import WelcomePage from './pages/public/WelcomePage';
+import Comparison from './pages/public/Comparison';
+import CommentCaMarchePage from './pages/public/CommentCaMarchePage';
+import AboutUsPage from './pages/public/AboutUsPage';
+import Contact from './components/sections/Contact';
+import SignUp from './pages/private/SignUp';
+import Auth from './pages/private/Auth';
+import Profile from './pages/private/Profile';
+import ChangePassword from './pages/private/ChangePassword';
+import Reservations from './pages/private/Reservations';
 
 const App = () => {
   return (

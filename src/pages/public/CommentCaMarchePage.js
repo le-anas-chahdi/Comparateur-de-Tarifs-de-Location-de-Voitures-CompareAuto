@@ -1,6 +1,6 @@
 import React from 'react';
-import Navbar from '../../components/Navbar';
-import CommentCaMarche from '../../components/CommentCaMarche';
+import Navbar from '../../components/layout/Navbar';
+import CommentCaMarche from '../../components/sections/CommentCaMarche';
 
 const CommentCaMarchePage = () => {
   return (

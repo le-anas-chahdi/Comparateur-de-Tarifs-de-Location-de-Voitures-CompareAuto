@@ -1,6 +1,6 @@
 import React from 'react';
-import Navbar from '../../components/Navbar';
-import AboutUs from '../../components/AboutUs';
+import Navbar from '../../components/layout/Navbar';
+import AboutUs from '../../components/sections/AboutUs';
 
 const AboutUsPage = () => {
   return (

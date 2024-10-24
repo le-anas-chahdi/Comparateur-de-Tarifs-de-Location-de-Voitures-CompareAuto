@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { auth, db, storage } from '../../firebaseConfig'; // Assurez-vous d'importer auth, db et storage
+import { auth, db, storage } from '../../config/firebaseConfig'; // Assurez-vous d'importer auth, db et storage
 import { Link } from 'react-router-dom';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { doc, setDoc, getDoc } from 'firebase/firestore';

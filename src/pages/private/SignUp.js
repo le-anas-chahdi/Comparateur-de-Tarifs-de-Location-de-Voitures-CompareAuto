@@ -1,6 +1,6 @@
 // src/SignUp.js
 import React, { useState } from 'react';
-import { auth, db } from '../../firebaseConfig'; // Assurez-vous d'importer auth et db (Firestore)
+import { auth, db } from '../../config/firebaseConfig'; // Assurez-vous d'importer auth et db (Firestore)
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 

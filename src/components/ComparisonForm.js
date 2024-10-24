@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './ComparisonForm.css';
-import { noSubscriptionPricing, subscriptionPricing } from '../pricingData/citizpriceCalculation';
-import { leoAndGoPricingCalculation } from '../pricingData/leoAndGoPriceCalculation';
-import leoAndGoPricing from '../pricingData/leoAndGoPricing'; // Import pricing data directly
+import { noSubscriptionPricing, subscriptionPricing } from '../utils/pricingCalculations/citizpriceCalculation';
+import { leoAndGoPricingCalculation } from '../utils/pricingCalculations/leoAndGoPriceCalculation';
+import leoAndGoPricing from '../data/leoAndGoPricing'; // Import pricing data directly
 import { Line } from 'react-chartjs-2'; // Import chart component
 
 // Import necessary Chart.js components and manually register them
