@@ -181,19 +181,17 @@ const ComparisonForm = () => {
     };
 
     return (
-        <div>
+        <div className="comparison-form-container">
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                    <label>
-                        Duration:
-                        <input
-                            type="number"
-                            value={duration}
-                            onChange={(e) => setDuration(e.target.value)}
-                            required
-                            className="form-control"
-                        />
-                    </label>
+                    <label>Duration:</label>
+                    <input
+                        type="number"
+                        value={duration}
+                        onChange={(e) => setDuration(e.target.value)}
+                        required
+                        className="form-control"
+                    />
                     <select
                         value={durationScale}
                         onChange={(e) => setDurationScale(e.target.value)}
@@ -206,97 +204,86 @@ const ComparisonForm = () => {
                         <option value="months">Months</option>
                     </select>
                 </div>
-
+    
                 <div className="form-group">
-                    <label>
-                        Car Type:
-                        <select
-                            value={carType}
-                            onChange={(e) => setCarType(e.target.value)}
-                            required
-                            className="form-control"
-                        >
-                            <option value="verysmallcars">Very Small Cars</option>
-                            <option value="smallCars">Small Cars</option>
-                            <option value="compactCars">Compact Cars</option>
-                            <option value="airportCars">Airport Cars</option>
-                            <option value="utilityVehicles3m3">Utility Vehicles (3m³)</option>
-                            <option value="utilityVehicles6m3">Utility Vehicles (6m³)</option>
-                            <option value="teslaCars">Tesla Cars</option>
-                            <option value="mpvCars">MPV Cars</option>
-                        </select>
-                    </label>
+                    <label>Car Type:</label>
+                    <select
+                        value={carType}
+                        onChange={(e) => setCarType(e.target.value)}
+                        required
+                        className="form-control"
+                    >
+                        <option value="verysmallcars">Very Small Cars</option>
+                        <option value="smallCars">Small Cars</option>
+                        <option value="compactCars">Compact Cars</option>
+                        <option value="airportCars">Airport Cars</option>
+                        <option value="utilityVehicles3m3">Utility Vehicles (3m³)</option>
+                        <option value="utilityVehicles6m3">Utility Vehicles (6m³)</option>
+                        <option value="teslaCars">Tesla Cars</option>
+                        <option value="mpvCars">MPV Cars</option>
+                    </select>
                 </div>
-
+    
                 <div className="form-group">
-                    <label>
-                        Kilometers:
-                        <input
-                            type="number"
-                            value={kilometers}
-                            onChange={(e) => setKilometers(e.target.value)}
-                            required
-                            className="form-control"
-                        />
-                    </label>
+                    <label>Kilometers:</label>
+                    <input
+                        type="number"
+                        value={kilometers}
+                        onChange={(e) => setKilometers(e.target.value)}
+                        required
+                        className="form-control"
+                    />
                 </div>
-
-                <div className="form-group">
-                    <label>
+    
+                <div className="checkbox-group">
+                    <input
+                        type="checkbox"
+                        checked={isSubscribed}
+                        onChange={(e) => setIsSubscribed(e.target.checked)}
+                    />
+                    <label>Are you a Citiz subscriber?</label>
+                </div>
+    
+                {!isSubscribed && (
+                    <div className="checkbox-group">
                         <input
                             type="checkbox"
-                            checked={isSubscribed}
-                            onChange={(e) => setIsSubscribed(e.target.checked)}
+                            checked={showSubscriberPrices}
+                            onChange={(e) => setShowSubscriberPrices(e.target.checked)}
                         />
-                        Are you a Citiz subscriber?
-                    </label>
-                </div>
-
-                {/* Only show this option if the user is not subscribed to Citiz */}
-                {!isSubscribed && (
-                    <div className="form-group">
-                        <label>
-                            <input
-                                type="checkbox"
-                                checked={showSubscriberPrices}
-                                onChange={(e) => setShowSubscriberPrices(e.target.checked)}
-                            />
-                            Citiz subscriber prices are more advantageous. Would you like to see both prices?
-                        </label>
+                        <label>Citiz subscriber prices are more advantageous. Would you like to see both prices?</label>
                     </div>
                 )}
-
+    
                 <button type="submit" className="btn-submit">Submit</button>
             </form>
-
-            {/* Display error message if unavailable car type is selected */}
+    
             {leoAndGoErrorMessage && (
                 <div className="error-message">
                     <p>{leoAndGoErrorMessage}</p>
                 </div>
             )}
-
+    
             {citizErrorMessage && (
                 <div className="error-message">
                     <p>{citizErrorMessage}</p>
                 </div>
             )}
-
-            {/* Display max duration message for Leo&Go */}
+    
             {maxDurationMessage && (
                 <div className="max-duration-message">
                     <p>{maxDurationMessage}</p>
                 </div>
             )}
-
-            {/* Render the chart if price data is available */}
+    
             {priceData && (
                 <div>
-                    <Line data={priceData} options={chartOptions} /> {/* Pass chartOptions */}
+                    <Line data={priceData} options={chartOptions} />
                 </div>
             )}
         </div>
     );
+    
 };
 
 export default ComparisonForm;

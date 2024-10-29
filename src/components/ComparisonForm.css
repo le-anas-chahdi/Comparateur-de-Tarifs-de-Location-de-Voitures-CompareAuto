@@ -1,34 +1,143 @@
-.form-group {
-    margin-bottom: 20px;
+/* Container for the whole form */
+.comparison-form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
 }
 
+/* Align and space out form groups */
+.form-group {
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Label styling */
 .form-group label {
     font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    color: #333;
 }
 
+/* Style for inputs and select elements */
 .form-control {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
-    margin-bottom: 10px;
+    transition: border-color 0.3s ease;
 }
 
+/* Consistent padding and width for select elements */
+.form-control select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: white;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Styling the submit button */
 .btn-submit {
     background-color: #007bff;
     color: white;
-    padding: 10px 20px;
+    padding: 12px;
     border: none;
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
     width: 100%;
+    margin-top: 10px;
 }
 
 .btn-submit:hover {
     background-color: #0056b3;
+}
+
+/* Styling for the checkboxes and their labels */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.checkbox-group input {
+    margin-right: 10px;
+}
+
+.checkbox-group label {
+    font-weight: normal;
+}
+
+/* Error and messages styling */
+.error-message, .max-duration-message {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.error-message {
+    color: red;
+    background-color: #ffe6e6;
+}
+
+.max-duration-message {
+    color: #ffa500;
+    background-color: #fff3cd;
+}
+
+/* Media query for responsiveness */
+@media (max-width: 768px) {
+    .comparison-form-container {
+        padding: 20px;
+    }
+
+    .form-control, .btn-submit {
+        font-size: 14px;
+    }
+}
+
+/* Container for the chart */
+.chart-container {
+    width: 100%;
+    max-width: 1000px; /* Adjust as needed */
+    height: 60vh; /* Height relative to the viewport */
+    margin: 20px auto; /* Center the chart */
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Error and max-duration messages styling */
+.error-message, .max-duration-message {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+}
+
+.error-message {
+    color: red;
+    background-color: #ffe6e6;
+}
+
+.max-duration-message {
+    color: #ffa500;
+    background-color: #fff3cd;
 }
