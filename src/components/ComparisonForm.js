@@ -4,6 +4,7 @@ import { noSubscriptionPricing, subscriptionPricing } from '../utils/pricingCalc
 import { leoAndGoPricingCalculation } from '../utils/pricingCalculations/leoAndGoPriceCalculation';
 import leoAndGoPricing from '../data/leoAndGoPricing'; // Import pricing data directly
 import { Line } from 'react-chartjs-2'; // Import chart component
+import { avisPriceCalculation } from '../utils/pricingCalculations/avisPriceCalculation';
 
 // Import necessary Chart.js components and manually register them
 import {
@@ -129,6 +130,14 @@ const ComparisonForm = () => {
                 priceComparisonData.datasets[0].borderColor.push('#007bff');
             }
         }
+
+        const avisPrice = avisPriceCalculation(carType, durationInMinutes);
+        if (avisPrice > 0) {
+            priceComparisonData.labels.push('Avis');
+            priceComparisonData.datasets[0].data.push(avisPrice);
+            priceComparisonData.datasets[0].borderColor.push('#ffa500'); // Use a unique color for Avis
+        }
+
 
         setPriceData(priceComparisonData); // Set data for chart
     };
