@@ -1,16 +1,17 @@
-// src/Auth.js
 import React, { useState } from 'react';
-import { auth, db } from '../../config/firebaseConfig'; // Assurez-vous d'importer auth et db (Firestore)
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { auth, db, facebookProvider } from '../../config/firebaseConfig'; // Importer FacebookProvider
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'; 
 import { doc, setDoc } from 'firebase/firestore';
 import './Auth.css';
 
 const Auth = () => {
-    const [isLogin, setIsLogin] = useState(true); // État pour savoir si l'utilisateur est en mode connexion ou inscription
+    const [isLogin, setIsLogin] = useState(true); 
     const [formData, setFormData] = useState({
         nom: '',
         prenom: '',
         adresse: '',
+        departement: '',
+        telephone: '',
         email: '',
         motDePasse: '',
         confirmationMotDePasse: '',
@@ -28,31 +29,54 @@ const Auth = () => {
         e.preventDefault();
         setError('');
 
+        if (!isLogin) {
+            const { nom, prenom, adresse, departement, telephone, email, motDePasse, confirmationMotDePasse } = formData;
+            
+            if (!nom || !prenom || !adresse || !departement || !telephone || !email || !motDePasse || !confirmationMotDePasse) {
+                setError('Veuillez remplir tous les champs.');
+                return;
+            }
+
+            if (motDePasse !== confirmationMotDePasse) {
+                setError('Les mots de passe ne correspondent pas.');
+                return;
+            }
+        }
+
         try {
             if (isLogin) {
-                // Connexion
                 await signInWithEmailAndPassword(auth, formData.email, formData.motDePasse);
-                window.location.href = '/profile'; // Redirection vers le profil après connexion
+                window.location.href = '/profile';
             } else {
-                // Inscription
-                if (formData.motDePasse !== formData.confirmationMotDePasse) {
-                    setError('Les mots de passe ne correspondent pas');
-                    return;
-                }
-
-                // Création de l'utilisateur
                 const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.motDePasse);
                 const user = userCredential.user;
 
-                // Crée un document pour l'utilisateur dans Firestore
                 await setDoc(doc(db, 'users', user.uid), {
                     nom: formData.nom,
                     prenom: formData.prenom,
                     adresse: formData.adresse,
+                    departement: formData.departement,
+                    telephone: formData.telephone,
                 });
 
-                window.location.href = '/profile'; // Redirection vers le profil après inscription
+                window.location.href = '/profile';
             }
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
+    const handleFacebookLogin = async () => {
+        try {
+            const result = await signInWithPopup(auth, facebookProvider);
+            const user = result.user;
+
+            await setDoc(doc(db, 'users', user.uid), {
+                nom: user.displayName,
+                email: user.email,
+            });
+
+            window.location.href = '/profile';
         } catch (err) {
             setError(err.message);
         }
@@ -77,6 +101,10 @@ const Auth = () => {
                                 <label htmlFor="adresse">Adresse</label>
                                 <input type="text" id="adresse" name="adresse" value={formData.adresse} onChange={handleChange} required />
                             </div>
+                            <div className="form-group">
+                                <label htmlFor="telephone">N° de téléphone</label>
+                                <input type="tel" id="telephone" name="telephone" value={formData.telephone} onChange={handleChange} required />
+                            </div>
                         </>
                     )}
                     <div className="form-group">
@@ -85,7 +113,14 @@ const Auth = () => {
                     </div>
                     <div className="form-group">
                         <label htmlFor="motDePasse">Mot de passe</label>
-                        <input type="password" id="motDePasse" name="motDePasse" value={formData.motDePasse} onChange={handleChange} required />
+                        <input
+                            type="password"
+                            id="motDePasse"
+                            name="motDePasse"
+                            value={formData.motDePasse}
+                            onChange={handleChange}
+                            required
+                        />
                     </div>
                     {!isLogin && (
                         <div className="form-group">
@@ -103,6 +138,11 @@ const Auth = () => {
                     {error && <div className="error">{error}</div>}
                     <button type="submit">{isLogin ? 'Se connecter' : 'S’inscrire'}</button>
                 </form>
+                <div className="facebook-login">
+                    <button onClick={handleFacebookLogin}>
+                        <i className="fa fa-facebook"></i> Se connecter avec Facebook
+                    </button>
+                </div>
                 <div className="auth-toggle">
                     <button onClick={() => setIsLogin(!isLogin)} className={isLogin ? '' : 'active'}>
                         {isLogin ? 'Créer un compte' : 'Déjà un compte ? Connexion'}

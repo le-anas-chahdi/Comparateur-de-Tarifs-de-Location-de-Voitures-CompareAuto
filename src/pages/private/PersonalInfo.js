@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { auth, db } from './firebase'; // Assurez-vous d'importer auth et db (Firestore)
-import { doc, getDoc, setDoc } from 'firebase/firestore'; // Importez setDoc pour mettre à jour les informations
-import './PersonalInfo.css'; // Assurez-vous d'importer le CSS
+import { auth, db } from '../../config/firebaseConfig'; 
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import Menu from './Menu'; 
+import './PersonalInfo.css';
 
 const PersonalInfo = () => {
     const [userInfo, setUserInfo] = useState(null);
@@ -11,21 +12,29 @@ const PersonalInfo = () => {
         nom: '',
         prenom: '',
         adresse: '',
+        telephone: '',
     });
 
     useEffect(() => {
         const user = auth.currentUser;
+
         if (user) {
             const fetchUserInfo = async () => {
-                const docRef = doc(db, 'users', user.uid);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    setUserInfo(docSnap.data());
-                    setFormData(docSnap.data()); // Remplir le formulaire avec les données existantes
-                } else {
-                    console.log("Aucun document trouvé pour cet utilisateur !");
+                try {
+                    const docRef = doc(db, 'users', user.uid);
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists()) {
+                        setUserInfo(docSnap.data());
+                        setFormData({
+                            ...docSnap.data(),
+                            telephone: docSnap.data().telephone || 'non renseigné',
+                        });
+                    }
+                } catch (err) {
+                    console.error("Erreur lors de la récupération des données :", err);
+                } finally {
+                    setLoading(false);
                 }
-                setLoading(false);
             };
             fetchUserInfo();
         } else {
@@ -48,18 +57,30 @@ const PersonalInfo = () => {
         e.preventDefault();
         const user = auth.currentUser;
 
-        // Mettre à jour les informations dans Firestore
-        await setDoc(doc(db, 'users', user.uid), formData);
-        setUserInfo(formData);
-        setEditMode(false); // Désactiver le mode édition
+        if (!user) {
+            return;
+        }
+
+        try {
+            await setDoc(doc(db, 'users', user.uid), formData);
+            setUserInfo(formData);
+            setEditMode(false);
+        } catch (err) {
+            console.error("Erreur lors de la mise à jour des données :", err);
+        }
     };
 
     if (loading) {
         return <div>Chargement des informations...</div>;
     }
 
+    if (!auth.currentUser) {
+        return <div>Veuillez vous connecter pour accéder à vos informations personnelles.</div>;
+    }
+
     return (
         <div className="personal-info-container">
+            <Menu /> 
             <h2>Informations Personnelles</h2>
             {userInfo ? (
                 <div className="personal-info">
@@ -95,6 +116,15 @@ const PersonalInfo = () => {
                                     required
                                 />
                             </label>
+                            <label>
+                                <strong>Téléphone :</strong>
+                                <input
+                                    type="text"
+                                    name="telephone"
+                                    value={formData.telephone}
+                                    onChange={handleChange}
+                                />
+                            </label>
                             <button type="submit">Enregistrer les modifications</button>
                         </form>
                     ) : (
@@ -102,13 +132,14 @@ const PersonalInfo = () => {
                             <p><strong>Nom :</strong> {userInfo.nom}</p>
                             <p><strong>Prénom :</strong> {userInfo.prenom}</p>
                             <p><strong>Adresse :</strong> {userInfo.adresse}</p>
+                            <p><strong>Téléphone :</strong> {userInfo.telephone || 'non renseigné'}</p>
                             <p><strong>Email :</strong> {auth.currentUser.email}</p>
-                            <button onClick={handleEditClick}>Modifier mes informations</button>
+                            <button onClick={handleEditClick}>Modifier</button>
                         </div>
                     )}
                 </div>
             ) : (
-                <p>Aucun utilisateur connecté.</p>
+                <div>Aucune donnée trouvée.</div>
             )}
         </div>
     );

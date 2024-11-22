@@ -1,0 +1,65 @@
+.menu-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 100%;
+    background-color: #9be98c;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    padding-top: 20px; /* Décale l'ensemble du menu vers le bas */
+}
+
+
+.menu-icon {
+    font-size: 24px;
+    cursor: pointer;
+    margin: 30px auto; /* Centrer l'icône horizontalement */
+    color: #2b0000;
+}
+
+.menu-content {
+    flex-grow: 1; /* Laisser les items prendre tout l'espace disponible */
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0;
+    margin-top: 50px; /* Décale les items de menu vers le bas */
+}
+
+
+.menu-item {
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Ligne de séparation légère */
+    transition: background-color 0.3s ease; /* Animation pour hover */
+}
+
+.menu-item:last-child {
+    border-bottom: none; /* Pas de bordure pour le dernier élément */
+}
+
+.menu-item a {
+    text-decoration: none; /* Retirer le soulignement */
+    color: #000000; /* Couleur de base */
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.menu-item:hover {
+    background-color: #d8d0d0; /* Changer la couleur de fond au survol */
+}
+
+.menu-item a:hover {
+    color: #9eca6c; /* Changer la couleur du texte au survol */
+}
+
+.menu-footer {
+    margin-top: auto; /* Placer le footer en bas */
+    padding: 15px 20px;
+    background-color: #db0a0a;
+    text-align: center;
+    font-size: 14px;
+    color: #9eca6c;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}

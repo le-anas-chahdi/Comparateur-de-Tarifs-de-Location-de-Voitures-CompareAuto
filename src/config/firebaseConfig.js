@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, FacebookAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore"; // Pour Firestore
 import { getStorage } from "firebase/storage"; // Pour Firebase Storage
 
@@ -18,4 +18,10 @@ const auth = getAuth(app);
 const db = getFirestore(app); // Initialisation Firestore
 const storage = getStorage(app); // Initialisation Storage
 
-export { auth, db, storage };
+// Création du fournisseur Facebook
+const facebookProvider = new FacebookAuthProvider();
+facebookProvider.setCustomParameters({
+  display: "popup", // Assurez-vous que le popup est spécifié
+});
+
+export { auth, db, storage, facebookProvider };

@@ -1,0 +1,47 @@
+.reservations-container {
+    display: flex;
+}
+
+.menu-container {
+    flex: 0 0 200px; /* Fixe la largeur du menu */
+}
+
+.reservations-content {
+    flex: 1;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.reservations-section {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.past-reservations, .upcoming-reservations {
+    flex: 1;
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+    border-bottom: 2px solid #dbc76e;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+li:last-child {
+    border-bottom: none;
+}
