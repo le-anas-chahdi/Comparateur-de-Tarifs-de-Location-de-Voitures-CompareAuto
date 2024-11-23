@@ -1,130 +1,106 @@
 import React, { useState, useEffect } from 'react';
-import { auth, db, storage } from '../../config/firebaseConfig'; // Assurez-vous d'importer auth, db et storage
-import { Link } from 'react-router-dom';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { auth, db, storage } from '../../config/firebaseConfig';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
-import Menu from './Menu'; // Importation de Menu.js
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import Menu from './Menu';
 import './Profile.css';
 
-const defaultProfileImage = `${process.env.PUBLIC_URL}/images/defaut.jpg`; // Utiliser PUBLIC_URL pour accéder à public
-
 const Profile = () => {
-    const [user, setUser] = useState(null);
-    const [profileImage, setProfileImage] = useState(defaultProfileImage); // Image par défaut
-    const [imageFile, setImageFile] = useState(null); // Pour stocker le fichier image
+    const [profileImage, setProfileImage] = useState(null); // URL de l'image de profil
+    const [userData, setUserData] = useState(null); // Informations utilisateur (nom, email)
+    const [message, setMessage] = useState(''); // Message pour l'utilisateur
 
+    // Charger les données utilisateur depuis Firestore
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+        const fetchUserData = async () => {
+            const currentUser = auth.currentUser;
+
             if (currentUser) {
-                setUser(currentUser);
+                try {
+                    const userDocRef = doc(db, 'users', currentUser.uid);
+                    const userSnapshot = await getDoc(userDocRef);
 
-                // Récupérer les données utilisateur depuis Firestore
-                const docRef = doc(db, 'users', currentUser.uid);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-
-                    // Définir l'image récupérée
-                    if (data.profileImage) {
-                        setProfileImage(data.profileImage);
-                    }
-                } else {
-                    // Si l'utilisateur est connecté via Facebook, enregistrez ses informations
-                    if (currentUser.providerData[0].providerId === 'facebook.com') {
-                        await setDoc(doc(db, 'users', currentUser.uid), {
-                            displayName: currentUser.displayName || "Utilisateur Facebook",
+                    if (userSnapshot.exists()) {
+                        const userData = userSnapshot.data();
+                        setUserData({
                             email: currentUser.email,
-                            profileImage: currentUser.photoURL || defaultProfileImage,
+                            nom: userData.nom || 'Utilisateur',
+                            prenom: userData.prenom || '',
                         });
-                        console.log("Utilisateur Facebook enregistré dans Firestore.");
-                        setProfileImage(currentUser.photoURL || defaultProfileImage);
+                        setProfileImage(userData.profileImage || null); // Charger l'image si disponible
+                    } else {
+                        setMessage("Aucune donnée utilisateur trouvée.");
                     }
+                } catch (error) {
+                    console.error("Erreur lors de la récupération des données utilisateur :", error);
+                    setMessage("Erreur lors de la récupération des données utilisateur.");
                 }
             } else {
-                // Redirection si l'utilisateur n'est pas connecté
-                window.location.href = '/login';
+                setMessage('Veuillez vous connecter.');
             }
-        });
+        };
 
-        return () => unsubscribe();
+        fetchUserData();
     }, []);
 
-    const handleImageChange = (e) => {
+    const handleImageUpload = async (e) => {
         const file = e.target.files[0];
-        if (file) {
-            setImageFile(file); // Stocke le fichier image pour le téléchargement
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setProfileImage(reader.result); // Met à jour l'état avec l'image sélectionnée pour l'afficher
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    const handleUpload = async () => {
-        if (!imageFile) {
-            alert("Veuillez sélectionner une image !");
+        if (!file) {
+            alert('Veuillez sélectionner une image.');
             return;
         }
 
         const currentUser = auth.currentUser;
-        const storageRef = ref(storage, `profileImages/${currentUser.uid}/${imageFile.name}`);
+        if (!currentUser) {
+            alert('Utilisateur non connecté.');
+            return;
+        }
 
         try {
-            // Télécharge l'image
-            await uploadBytes(storageRef, imageFile);
-            console.log("Image téléchargée dans Firebase Storage.");
+            const storageRef = ref(storage, `profileImages/${currentUser.uid}/${file.name}`); // Chemin de stockage
+            await uploadBytes(storageRef, file); // Télécharger l'image dans Firebase Storage
 
-            // Obtient l'URL de l'image
-            const url = await getDownloadURL(storageRef);
-            console.log("URL de l'image obtenue depuis Firebase Storage :", url);
+            const downloadURL = await getDownloadURL(storageRef); // Obtenir l'URL de téléchargement
 
-            // Met à jour l'image de profil affichée
-            setProfileImage(url);
+            // Sauvegarder l'URL de l'image dans Firestore
+            await setDoc(
+                doc(db, 'users', currentUser.uid),
+                { profileImage: downloadURL },
+                { merge: true }
+            );
 
-            // Enregistre l'URL dans Firestore
-            await setDoc(doc(db, 'users', currentUser.uid), { profileImage: url }, { merge: true });
-            console.log("URL de l'image enregistrée dans Firestore.");
+            setProfileImage(downloadURL); // Mettre à jour l'image dans l'état
+            setMessage('Image de profil mise à jour avec succès.');
         } catch (error) {
-            console.error("Erreur lors du téléchargement de l'image ou de l'enregistrement dans Firestore :", error);
+            console.error('Erreur lors de l’upload de l’image :', error);
+            setMessage("Erreur lors du téléchargement de l'image.");
         }
     };
 
     return (
         <div className="profile-container">
-            {/* Icône du menu à gauche */}
-            <Menu /> {/* Intégration de Menu.js ici */}
-
-            {/* Titre du Profil */}
-            <div className="profile-header">
-                <h2>Mon Profil</h2>
-            </div>
-
-            {/* Image de profil et téléchargement */}
+            <Menu /> {/* Menu pour la navigation */}
+            <h2>Mon Profil</h2>
             <div className="profile-content">
-                <div className="profile-photo">
-                    <img src={profileImage} alt="Profil" />
-                    <input 
-                        type="file" 
-                        accept="image/*" 
-                        id="file-upload" 
-                        onChange={handleImageChange} 
-                        className="upload-button" 
-                    />
-                    <label htmlFor="file-upload" className="custom-upload-button">Choisir une photo de profil</label>
-                    <button onClick={handleUpload} className="upload-button">Télécharger</button>
-                </div>
-                {user ? (
-                    <div className="user-info">
-                        <h3>{user.displayName || "Utilisateur"}</h3>
-                        <p className="user-email">{user.email}</p>
-                    </div>
+                {userData ? (
+                    <>
+                        <div className="user-info">
+                            <p><strong>Nom :</strong> {userData.nom} {userData.prenom}</p>
+                            <p><strong>Email :</strong> {userData.email}</p>
+                        </div>
+                        <div className="profile-photo">
+                            <img
+                                src={profileImage || `${process.env.PUBLIC_URL}/images/defaut.jpg`}
+                                alt="Profil"
+                                className="profile-image"
+                            />
+                            <input type="file" accept="image/*" onChange={handleImageUpload} />
+                        </div>
+                        {message && <p className="message">{message}</p>}
+                    </>
                 ) : (
-                    <p>Aucun utilisateur connecté.</p>
+                    <p>Chargement des informations utilisateur...</p>
                 )}
-                <div className="profile-actions">
-                    <Link to="/comparison" className="action-button">Accéder aux Tarifs</Link>
-                </div>
             </div>
         </div>
     );
