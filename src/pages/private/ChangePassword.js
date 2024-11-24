@@ -4,6 +4,7 @@ import { EmailAuthProvider, reauthenticateWithCredential, updatePassword, signOu
 import { useNavigate } from 'react-router-dom';
 import Menu from './Menu'; 
 import './ChangePassword.css';
+import Navbar from '../../components/layout/Navbar';
 
 const ChangePassword = () => {
     const [oldPassword, setOldPassword] = useState('');
@@ -49,47 +50,50 @@ const ChangePassword = () => {
     };
 
     return (
-        <div className="change-password-container">
-            <Menu /> 
-            <h2>Changer Mot de Passe</h2>
-            <form onSubmit={handleChangePassword}>
-                <div className="form-group">
-                    <label htmlFor="oldPassword">Ancien Mot de Passe</label>
-                    <input
-                        type="password"
-                        id="oldPassword"
-                        value={oldPassword}
-                        onChange={(e) => setOldPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="newPassword">Nouveau Mot de Passe</label>
-                    <input
-                        type="password"
-                        id="newPassword"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        required
-                    />
-                    <small>Le mot de passe doit contenir au moins 6 caractères.</small>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="confirmPassword">Confirmer le Nouveau Mot de Passe</label>
-                    <input
-                        type="password"
-                        id="confirmPassword"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                {error && <div className="error">{error}</div>}
-                {success && <div className="success">{success}</div>}
-                <button type="submit">Changer Mot de Passe</button>
-            </form>
+        <div>
+            <Navbar />
+            <div className="change-password-container">
+                <Menu /> 
+                <h2>Changer Mot de Passe</h2>
+                <form onSubmit={handleChangePassword}>
+                    <div className="form-group">
+                        <label htmlFor="oldPassword">Ancien Mot de Passe</label>
+                        <input
+                            type="password"
+                            id="oldPassword"
+                            value={oldPassword}
+                            onChange={(e) => setOldPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="newPassword">Nouveau Mot de Passe</label>
+                        <input
+                            type="password"
+                            id="newPassword"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            required
+                        />
+                        <small>Le mot de passe doit contenir au moins 6 caractères.</small>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="confirmPassword">Confirmer le Nouveau Mot de Passe</label>
+                        <input
+                            type="password"
+                            id="confirmPassword"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+                    {error && <div className="error">{error}</div>}
+                    {success && <div className="success">{success}</div>}
+                    <button type="submit">Changer Mot de Passe</button>
+                </form>
+            </div>
         </div>
-    );
+        );
 };
 
 export default ChangePassword;

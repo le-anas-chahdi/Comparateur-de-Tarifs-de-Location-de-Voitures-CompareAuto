@@ -4,6 +4,7 @@ import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import Menu from './Menu';
 import './Profile.css';
+import Navbar from '../../components/layout/Navbar';
 
 const Profile = () => {
     const [profileImage, setProfileImage] = useState(null); // URL de l'image de profil
@@ -78,29 +79,32 @@ const Profile = () => {
     };
 
     return (
-        <div className="profile-container">
-            <Menu /> {/* Menu pour la navigation */}
-            <h2>Mon Profil</h2>
-            <div className="profile-content">
-                {userData ? (
-                    <>
-                        <div className="user-info">
-                            <p><strong>Nom :</strong> {userData.nom} {userData.prenom}</p>
-                            <p><strong>Email :</strong> {userData.email}</p>
-                        </div>
-                        <div className="profile-photo">
-                            <img
-                                src={profileImage || `${process.env.PUBLIC_URL}/images/defaut.jpg`}
-                                alt="Profil"
-                                className="profile-image"
-                            />
-                            <input type="file" accept="image/*" onChange={handleImageUpload} />
-                        </div>
-                        {message && <p className="message">{message}</p>}
-                    </>
-                ) : (
-                    <p>Chargement des informations utilisateur...</p>
-                )}
+        <div>
+            <Navbar />
+            <div className="profile-container">
+                <Menu /> {/* Menu pour la navigation */}
+                <h2>Mon Profil</h2>
+                <div className="profile-content">
+                    {userData ? (
+                        <>
+                            <div className="user-info">
+                                <p><strong>Nom :</strong> {userData.nom} {userData.prenom}</p>
+                                <p><strong>Email :</strong> {userData.email}</p>
+                            </div>
+                            <div className="profile-photo">
+                                <img
+                                    src={profileImage || `${process.env.PUBLIC_URL}/images/defaut.jpg`}
+                                    alt="Profil"
+                                    className="profile-image"
+                                />
+                                <input type="file" accept="image/*" onChange={handleImageUpload} />
+                            </div>
+                            {message && <p className="message">{message}</p>}
+                        </>
+                    ) : (
+                        <p>Chargement des informations utilisateur...</p>
+                    )}
+                </div>
             </div>
         </div>
     );

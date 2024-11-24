@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { auth, db } from '../../config/firebaseConfig'; // Assurez-vous d'importer auth et db (Firestore)
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
+import Navbar from '../../components/layout/Navbar';
 
 const SignUp = () => {
     const [email, setEmail] = useState('');
@@ -35,47 +36,50 @@ const SignUp = () => {
     };
 
     return (
-        <div className="signup-container">
-            <h2>Inscription</h2>
-            <form onSubmit={handleSignUp}>
-                <input 
-                    type="text" 
-                    placeholder="Nom" 
-                    value={nom} 
-                    onChange={(e) => setNom(e.target.value)} 
-                    required 
-                />
-                <input 
-                    type="text" 
-                    placeholder="Prénom" 
-                    value={prenom} 
-                    onChange={(e) => setPrenom(e.target.value)} 
-                    required 
-                />
-                <input 
-                    type="text" 
-                    placeholder="Adresse" 
-                    value={adresse} 
-                    onChange={(e) => setAdresse(e.target.value)} 
-                    required 
-                />
-                <input 
-                    type="email" 
-                    placeholder="Email" 
-                    value={email} 
-                    onChange={(e) => setEmail(e.target.value)} 
-                    required 
-                />
-                <input 
-                    type="password" 
-                    placeholder="Mot de passe" 
-                    value={password} 
-                    onChange={(e) => setPassword(e.target.value)} 
-                    required 
-                />
-                {error && <p className="error">{error}</p>}
-                <button type="submit">S'inscrire</button>
-            </form>
+        <div>
+            <Navbar />
+            <div className="signup-container">
+                <h2>Inscription</h2>
+                <form onSubmit={handleSignUp}>
+                    <input 
+                        type="text" 
+                        placeholder="Nom" 
+                        value={nom} 
+                        onChange={(e) => setNom(e.target.value)} 
+                        required 
+                    />
+                    <input 
+                        type="text" 
+                        placeholder="Prénom" 
+                        value={prenom} 
+                        onChange={(e) => setPrenom(e.target.value)} 
+                        required 
+                    />
+                    <input 
+                        type="text" 
+                        placeholder="Adresse" 
+                        value={adresse} 
+                        onChange={(e) => setAdresse(e.target.value)} 
+                        required 
+                    />
+                    <input 
+                        type="email" 
+                        placeholder="Email" 
+                        value={email} 
+                        onChange={(e) => setEmail(e.target.value)} 
+                        required 
+                    />
+                    <input 
+                        type="password" 
+                        placeholder="Mot de passe" 
+                        value={password} 
+                        onChange={(e) => setPassword(e.target.value)} 
+                        required 
+                    />
+                    {error && <p className="error">{error}</p>}
+                    <button type="submit">S'inscrire</button>
+                </form>
+            </div>
         </div>
     );
 };

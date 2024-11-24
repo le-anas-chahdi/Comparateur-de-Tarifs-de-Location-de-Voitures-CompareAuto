@@ -3,6 +3,7 @@ import { auth, db } from '../../config/firebaseConfig';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import Menu from './Menu'; 
 import './PersonalInfo.css';
+import Navbar from '../../components/layout/Navbar';
 
 const PersonalInfo = () => {
     const [userInfo, setUserInfo] = useState(null);
@@ -79,68 +80,71 @@ const PersonalInfo = () => {
     }
 
     return (
-        <div className="personal-info-container">
-            <Menu /> 
-            <h2>Informations Personnelles</h2>
-            {userInfo ? (
-                <div className="personal-info">
-                    {editMode ? (
-                        <form onSubmit={handleSubmit}>
-                            <label>
-                                <strong>Nom :</strong>
-                                <input
-                                    type="text"
-                                    name="nom"
-                                    value={formData.nom}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </label>
-                            <label>
-                                <strong>Prénom :</strong>
-                                <input
-                                    type="text"
-                                    name="prenom"
-                                    value={formData.prenom}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </label>
-                            <label>
-                                <strong>Adresse :</strong>
-                                <input
-                                    type="text"
-                                    name="adresse"
-                                    value={formData.adresse}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </label>
-                            <label>
-                                <strong>Téléphone :</strong>
-                                <input
-                                    type="text"
-                                    name="telephone"
-                                    value={formData.telephone}
-                                    onChange={handleChange}
-                                />
-                            </label>
-                            <button type="submit">Enregistrer les modifications</button>
-                        </form>
-                    ) : (
-                        <div>
-                            <p><strong>Nom :</strong> {userInfo.nom}</p>
-                            <p><strong>Prénom :</strong> {userInfo.prenom}</p>
-                            <p><strong>Adresse :</strong> {userInfo.adresse}</p>
-                            <p><strong>Téléphone :</strong> {userInfo.telephone || 'non renseigné'}</p>
-                            <p><strong>Email :</strong> {auth.currentUser.email}</p>
-                            <button onClick={handleEditClick}>Modifier</button>
-                        </div>
-                    )}
-                </div>
-            ) : (
-                <div>Aucune donnée trouvée.</div>
-            )}
+        <div>
+            <Navbar />
+            <div className="personal-info-container">
+                <Menu /> 
+                <h2>Informations Personnelles</h2>
+                {userInfo ? (
+                    <div className="personal-info">
+                        {editMode ? (
+                            <form onSubmit={handleSubmit}>
+                                <label>
+                                    <strong>Nom :</strong>
+                                    <input
+                                        type="text"
+                                        name="nom"
+                                        value={formData.nom}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </label>
+                                <label>
+                                    <strong>Prénom :</strong>
+                                    <input
+                                        type="text"
+                                        name="prenom"
+                                        value={formData.prenom}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </label>
+                                <label>
+                                    <strong>Adresse :</strong>
+                                    <input
+                                        type="text"
+                                        name="adresse"
+                                        value={formData.adresse}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </label>
+                                <label>
+                                    <strong>Téléphone :</strong>
+                                    <input
+                                        type="text"
+                                        name="telephone"
+                                        value={formData.telephone}
+                                        onChange={handleChange}
+                                    />
+                                </label>
+                                <button type="submit">Enregistrer les modifications</button>
+                            </form>
+                        ) : (
+                            <div>
+                                <p><strong>Nom :</strong> {userInfo.nom}</p>
+                                <p><strong>Prénom :</strong> {userInfo.prenom}</p>
+                                <p><strong>Adresse :</strong> {userInfo.adresse}</p>
+                                <p><strong>Téléphone :</strong> {userInfo.telephone || 'non renseigné'}</p>
+                                <p><strong>Email :</strong> {auth.currentUser.email}</p>
+                                <button onClick={handleEditClick}>Modifier</button>
+                            </div>
+                        )}
+                    </div>
+                ) : (
+                    <div>Aucune donnée trouvée.</div>
+                )}
+            </div>
         </div>
     );
 };

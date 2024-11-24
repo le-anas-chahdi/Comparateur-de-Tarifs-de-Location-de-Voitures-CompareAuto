@@ -11,6 +11,7 @@ import Profile from './pages/private/Profile';
 import ChangePassword from './pages/private/ChangePassword';
 import Reservations from './pages/private/Reservations';
 import Subscriptions from './pages/private/Subscriptions';
+import PersonalInfo from './pages/private/PersonalInfo';
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
         <Route path="/auth" element={<Auth />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/personalinfo" element={<PersonalInfo />} />
         <Route path="/changepassword" element={<ChangePassword />} />
         <Route path="/reservations" element={<Reservations />} />
         <Route path="/subscriptions" element={<Subscriptions />} />

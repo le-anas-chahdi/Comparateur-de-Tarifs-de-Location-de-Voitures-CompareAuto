@@ -4,6 +4,7 @@ import { auth, db, facebookProvider } from '../../config/firebaseConfig';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import './Auth.css';
+import Navbar from '../../components/layout/Navbar';
 
 const Auth = () => {
     const [isLogin, setIsLogin] = useState(true); 
@@ -98,116 +99,119 @@ const Auth = () => {
     };
 
     return (
-        <div className="auth-page">
-            <div className="auth-container">
-                <h1>{isLogin ? 'Connexion' : 'Inscription'}</h1>
-                <form className="auth-form" onSubmit={handleSubmit}>
-                    {!isLogin && (
-                        <>
-                            <div className="form-group">
-                                <label htmlFor="nom">Nom</label>
-                                <input
-                                    type="text"
-                                    id="nom"
-                                    name="nom"
-                                    value={formData.nom}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="prenom">Prénom</label>
-                                <input
-                                    type="text"
-                                    id="prenom"
-                                    name="prenom"
-                                    value={formData.prenom}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="adresse">Adresse</label>
-                                <input
-                                    type="text"
-                                    id="adresse"
-                                    name="adresse"
-                                    value={formData.adresse}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="telephone">N° de téléphone</label>
-                                <input
-                                    type="tel"
-                                    id="telephone"
-                                    name="telephone"
-                                    value={formData.telephone}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="departement">Département</label>
-                                <input
-                                    type="text"
-                                    id="departement"
-                                    name="departement"
-                                    value={formData.departement}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-                        </>
-                    )}
-                    <div className="form-group">
-                        <label htmlFor="email">Adresse e-mail</label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="motDePasse">Mot de passe</label>
-                        <input
-                            type="password"
-                            id="motDePasse"
-                            name="motDePasse"
-                            value={formData.motDePasse}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    {!isLogin && (
+        <div>
+            <Navbar />
+            <div className="auth-page">
+                <div className="auth-container">
+                    <h1>{isLogin ? 'Connexion' : 'Inscription'}</h1>
+                    <form className="auth-form" onSubmit={handleSubmit}>
+                        {!isLogin && (
+                            <>
+                                <div className="form-group">
+                                    <label htmlFor="nom">Nom</label>
+                                    <input
+                                        type="text"
+                                        id="nom"
+                                        name="nom"
+                                        value={formData.nom}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="prenom">Prénom</label>
+                                    <input
+                                        type="text"
+                                        id="prenom"
+                                        name="prenom"
+                                        value={formData.prenom}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="adresse">Adresse</label>
+                                    <input
+                                        type="text"
+                                        id="adresse"
+                                        name="adresse"
+                                        value={formData.adresse}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="telephone">N° de téléphone</label>
+                                    <input
+                                        type="tel"
+                                        id="telephone"
+                                        name="telephone"
+                                        value={formData.telephone}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="departement">Département</label>
+                                    <input
+                                        type="text"
+                                        id="departement"
+                                        name="departement"
+                                        value={formData.departement}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+                            </>
+                        )}
                         <div className="form-group">
-                            <label htmlFor="confirmationMotDePasse">Confirmer le mot de passe</label>
+                            <label htmlFor="email">Adresse e-mail</label>
                             <input
-                                type="password"
-                                id="confirmationMotDePasse"
-                                name="confirmationMotDePasse"
-                                value={formData.confirmationMotDePasse}
+                                type="email"
+                                id="email"
+                                name="email"
+                                value={formData.email}
                                 onChange={handleChange}
                                 required
                             />
                         </div>
-                    )}
-                    {error && <div className="error">{error}</div>}
-                    <button type="submit">{isLogin ? 'Se connecter' : 'S’inscrire'}</button>
-                </form>
-                <div className="facebook-login">
-                    <button onClick={handleFacebookLogin}>
-                        <i className="fa fa-facebook"></i> Se connecter avec Facebook
-                    </button>
-                </div>
-                <div className="auth-toggle">
-                    <button onClick={() => setIsLogin(!isLogin)} className={isLogin ? '' : 'active'}>
-                        {isLogin ? 'Créer un compte' : 'Déjà un compte ? Connexion'}
-                    </button>
+                        <div className="form-group">
+                            <label htmlFor="motDePasse">Mot de passe</label>
+                            <input
+                                type="password"
+                                id="motDePasse"
+                                name="motDePasse"
+                                value={formData.motDePasse}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                        {!isLogin && (
+                            <div className="form-group">
+                                <label htmlFor="confirmationMotDePasse">Confirmer le mot de passe</label>
+                                <input
+                                    type="password"
+                                    id="confirmationMotDePasse"
+                                    name="confirmationMotDePasse"
+                                    value={formData.confirmationMotDePasse}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                        )}
+                        {error && <div className="error">{error}</div>}
+                        <button type="submit">{isLogin ? 'Se connecter' : 'S’inscrire'}</button>
+                    </form>
+                    <div className="facebook-login">
+                        <button onClick={handleFacebookLogin}>
+                            <i className="fa fa-facebook"></i> Se connecter avec Facebook
+                        </button>
+                    </div>
+                    <div className="auth-toggle">
+                        <button onClick={() => setIsLogin(!isLogin)} className={isLogin ? '' : 'active'}>
+                            {isLogin ? 'Créer un compte' : 'Déjà un compte ? Connexion'}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
