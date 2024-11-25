@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './Navbar.css';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const location = useLocation();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -21,18 +20,7 @@ const Navbar = () => {
         <Link to="/commentcamarchepage">Comment Ca Marche Page</Link>
         <Link to="/aboutuspage">About Us Page</Link>
         <Link to="/contact">Contact</Link>
-        {!location.pathname.startsWith('/profile') && ( // Show login and sign-up if not on the profile page
-          <>
-            <Link to="/auth" className="cta-btn">Login / Sign Up</Link>
-          </>
-        )}
-        {location.pathname.startsWith('/profile') && ( // Show profile-related links only on profile-related pages
-          <>
-            <Link to="/profile">Profile</Link>
-            <Link to="/changepassword">Change Password</Link>
-            <Link to="/reservations">Reservations</Link>
-          </>
-        )}
+        <Link to="/auth" className="cta-btn">Login / Sign Up</Link>
       </div>
       <div className="hamburger" onClick={toggleMenu}>
         <span className="bar"></span>
