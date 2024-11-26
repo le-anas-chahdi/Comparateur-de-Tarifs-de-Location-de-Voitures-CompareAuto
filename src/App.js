@@ -10,8 +10,13 @@ import Auth from './pages/private/Auth';
 import Profile from './pages/private/Profile';
 import ChangePassword from './pages/private/ChangePassword';
 import Reservations from './pages/private/Reservations';
+import Jobs from './components/sections/Jobs';
+import LegalPage from './pages/public/LegalPage';
+import PrivacyPolicyPage from './pages/public/PrivacyPolicyPage';
 import Subscriptions from './pages/private/Subscriptions';
 import PersonalInfo from './pages/private/PersonalInfo';
+
+
 
 const App = () => {
   return (
@@ -30,6 +35,10 @@ const App = () => {
         <Route path="/changepassword" element={<ChangePassword />} />
         <Route path="/reservations" element={<Reservations />} />
         <Route path="/subscriptions" element={<Subscriptions />} />
+        <Route path="/jobs" element={<Jobs />} />
+        <Route path="/mentions-legales" element={<LegalPage />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+
       </Routes>
     </Router>
   );

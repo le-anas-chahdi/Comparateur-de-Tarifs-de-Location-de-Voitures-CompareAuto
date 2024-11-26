@@ -1,0 +1,113 @@
+/* Section globale */
+.reviews-section {
+    position: relative;
+    padding: 60px 20px;
+    text-align: center;
+    background-image: url('/public/imaze/reviews.jpg'); /* Image d'arrière-plan */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #fff; /* Couleur blanche pour le texte */
+  }
+  
+  /* Overlay semi-transparent pour améliorer la lisibilité */
+  .reviews-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Couleur noire avec transparence */
+    z-index: 1;
+  }
+  
+  .reviews-section h2 {
+    position: relative;
+    z-index: 2;
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: #fff; /* Titre bleu clair pour un contraste agréable */
+  }
+  
+  /* Carousel des avis */
+  .reviews-carousel {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: nowrap;
+    overflow-x: auto; /* Scrolling horizontal sur petits écrans */
+    padding-bottom: 20px;
+    position: relative;
+    z-index: 2;
+  }
+  
+  /* Style des cartes d'avis */
+  .review-card {
+    background: #fff;
+    color: #333;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    flex: 0 0 auto;
+    padding: 20px;
+    text-align: left;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .review-card:hover {
+    transform: translateY(-10px); /* Légère élévation au survol */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .stars {
+    color: #ffc107; /* Couleur jaune pour les étoiles */
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  .review-card p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+  
+  .review-card strong {
+    font-size: 1rem;
+    color: #007bff;
+  }
+  
+  /* Liens vers les stores */
+  .review-links {
+    margin-top: 20px;
+    font-size: 1rem;
+    color: #fff;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .review-links a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .review-links a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .reviews-carousel {
+      gap: 15px;
+    }
+  
+    .review-card {
+      max-width: 250px;
+    }
+  
+    .reviews-section h2 {
+      font-size: 2rem;
+    }
+  }
+  

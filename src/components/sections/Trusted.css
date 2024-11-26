@@ -1,0 +1,42 @@
+.trusted-by {
+  background-color: #f5f8fc; /* Couleur de fond */
+  padding: 50px 20px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.trusted-by h2 {
+  font-size: 2rem;
+  color: #007bff;
+  margin-bottom: 20px;
+}
+
+.trusted-by p {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 40px;
+}
+
+/* Conteneur des images */
+.trusted-logos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Style des images */
+.trusted-logos img {
+  width: 150px; /* Largeur uniforme */
+  height: 150px; /* Hauteur uniforme */
+  object-fit: cover; /* Recadrer l'image pour remplir sans déformation */
+  border-radius: 8px; /* Coins arrondis pour un effet moderne */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.trusted-logos img:hover {
+  transform: scale(1.1); /* Effet de zoom au survol */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}

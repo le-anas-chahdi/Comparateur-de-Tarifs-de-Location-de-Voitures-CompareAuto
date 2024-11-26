@@ -1,5 +1,7 @@
 import React from 'react';
 import Navbar from '../layout/Navbar';
+import FeaturedCompanies from '../../components/sections/FeaturedCompanies';
+import Footer from '../../components/layout/Footer';
 import './Contact.css';
 
 const Contact = () => {
@@ -25,7 +27,10 @@ const Contact = () => {
           <button type="submit" className="submit-btn">Envoyer</button>
         </form>
       </div>
+      <FeaturedCompanies />
+      <Footer />
     </div>
+    
   );
 };
 

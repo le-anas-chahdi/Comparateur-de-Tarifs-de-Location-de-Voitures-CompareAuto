@@ -1,19 +1,18 @@
 import React from 'react';
-import Navbar from '../components/Navbar';
-import Contact from '../components/Contact';
+import Legal from '../../components/sections/Legal';
+import Navbar from '../../components/layout/Navbar';
 import FeaturedCompanies from '../../components/sections/FeaturedCompanies';
 import Footer from '../../components/layout/Footer';
 
-const ContactPage = () => {
+const LegalPage = () => {
   return (
-    <div>
+    <div className="legal-page">
       <Navbar />
-      <h1>Contact Page</h1>
-      <Contact />
+      <Legal />
       <FeaturedCompanies />
       <Footer />
     </div>
   );
 };
 
-export default ContactPage;
+export default LegalPage;
