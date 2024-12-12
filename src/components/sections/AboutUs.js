@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from "react-router-dom";
+
 
 const AboutUs = () => {
   return (
@@ -93,10 +95,16 @@ const AboutUs = () => {
 
       {/* Section Footer */}
       <footer className="about-footer bg-gray-800 text-white py-8 text-center">
-        <p className="text-sm">
-          Créé avec ❤ par <a href="https://www.yourcompany.com" target="_blank" rel="noopener noreferrer" className="text-teal-400 hover:underline">CarRentalCompare</a>
-        </p>
-      </footer>
+      <p className="text-sm">
+        Créé avec ❤ par{" "}
+        <Link
+          to="/"
+          className="text-teal-400 hover:underline"
+        >
+          CarRentalCompare
+        </Link>
+      </p>
+    </footer>
     </div>
   );
 };

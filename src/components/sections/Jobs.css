@@ -22,19 +22,18 @@
   }
   
   .cta-btn {
-    display: inline-block;
-    background: white;
-    color: #ff7e5f;
-    padding: 10px 20px;
-    font-size: 1rem;
-    border-radius: 5px;
+    background-color: #ffcc00;
+    color: #333;
+    padding: 12px 24px;
+    font-size: 18px;
+    border-radius: 4px;
     text-decoration: none;
-    transition: background 0.3s ease, color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease;
   }
   
   .cta-btn:hover {
-    background: #ff7e5f;
-    color: white;
+    background-color: #ff9900;
+    transform: scale(1.05);
   }
   
   .values-section {

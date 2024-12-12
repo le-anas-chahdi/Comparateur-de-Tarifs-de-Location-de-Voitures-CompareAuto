@@ -4,7 +4,7 @@ import WelcomePage from './pages/public/WelcomePage';
 import Comparison from './pages/public/Comparison';
 import CommentCaMarchePage from './pages/public/CommentCaMarchePage';
 import AboutUsPage from './pages/public/AboutUsPage';
-import Contact from './components/sections/Contact';
+import ContactPage from './pages/public/ContactPage';
 import SignUp from './pages/private/SignUp';
 import Auth from './pages/private/Auth';
 import Profile from './pages/private/Profile';
@@ -15,6 +15,7 @@ import LegalPage from './pages/public/LegalPage';
 import PrivacyPolicyPage from './pages/public/PrivacyPolicyPage';
 import Subscriptions from './pages/private/Subscriptions';
 import PersonalInfo from './pages/private/PersonalInfo';
+import SideBarMenu from './components/SideBarMenu';
 
 
 
@@ -26,7 +27,7 @@ const App = () => {
         <Route path="/comparison" element={<Comparison />} /> {/* Comparison route */}
         <Route path="/commentcamarchepage" element={<CommentCaMarchePage />} />
         <Route path="/aboutuspage" element={<AboutUsPage />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/contactpage" element={<ContactPage />} />
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/signup" element={<SignUp />} />
@@ -38,7 +39,7 @@ const App = () => {
         <Route path="/jobs" element={<Jobs />} />
         <Route path="/mentions-legales" element={<LegalPage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-
+        <Route path="/sidebarmenu" element={<SideBarMenu />} />
       </Routes>
     </Router>
   );

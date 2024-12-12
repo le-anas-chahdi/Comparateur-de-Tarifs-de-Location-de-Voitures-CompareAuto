@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './FAQ.css';
 
 const FAQ = () => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -32,16 +31,21 @@ const FAQ = () => {
   ];
 
   return (
-    <div className="faq-section">
-      <h2>Louer une voiture en France - FAQ</h2>
-      <div className="faq-list">
+    <div className="max-w-2xl mx-auto p-6">
+      <h2 className="text-4xl font-bold text-center mb-6 text-gray-800">Louer une voiture en France - FAQ</h2>
+      <div className="border-t border-gray-300">
         {faqData.map((item, index) => (
-          <div key={index} className="faq-item">
-            <div className="faq-question" onClick={() => toggleQuestion(index)}>
+          <div key={index} className="border-b border-gray-300 py-4">
+            <div
+              className="flex justify-between items-center cursor-pointer font-bold text-lg text-gray-800 hover:text-blue-500"
+              onClick={() => toggleQuestion(index)}
+            >
               {item.question}
-              <span className="faq-icon">{activeIndex === index ? "−" : "+"}</span>
+              <span className="text-2xl">{activeIndex === index ? "−" : "+"}</span>
             </div>
-            {activeIndex === index && <div className="faq-answer">{item.answer}</div>}
+            {activeIndex === index && (
+              <div className="mt-2 text-gray-600 text-base leading-relaxed">{item.answer}</div>
+            )}
           </div>
         ))}
       </div>

@@ -9,7 +9,6 @@ const CommentCaMarchePage = () => {
     <div>
       <Navbar />
       <CommentCaMarche />
-      <FeaturedCompanies />
       <Footer />
     </div>
   );

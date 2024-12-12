@@ -63,12 +63,12 @@ export default function MenuDawer() {
           </Link>
           <Link
             className="hover:text-[#ffcc00]"
-            to="/contact"
+            to="/contactpage"
             onClick={onClose}
           >
             Contact
           </Link>
-          <Link to="/login"
+          <Link to="/auth"
           className="hover:bg-[#ff9900]/80 bg-[#ffcc00] p-3 rounded-xl hover:text-slate-800 text-slate-700 transition-colors duration-300"
           onClick={onClose}
           >

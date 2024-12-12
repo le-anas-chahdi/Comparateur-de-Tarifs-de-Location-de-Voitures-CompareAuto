@@ -1,16 +1,13 @@
 import React from 'react';
-import Navbar from '../components/Navbar';
-import Contact from '../components/Contact';
-import FeaturedCompanies from '../../components/sections/FeaturedCompanies';
+import Navbar from '../../components/layout/Navbar';
+import Contact from '../../components/sections/Contact';
 import Footer from '../../components/layout/Footer';
 
 const ContactPage = () => {
   return (
     <div>
       <Navbar />
-      <h1>Contact Page</h1>
       <Contact />
-      <FeaturedCompanies />
       <Footer />
     </div>
   );

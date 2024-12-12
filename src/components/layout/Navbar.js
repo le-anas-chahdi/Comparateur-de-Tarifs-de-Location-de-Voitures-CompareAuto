@@ -24,10 +24,10 @@ const Navbar = () => {
           <Link className="hover:text-[#ffcc00]" to="/aboutuspage">
             About Us
           </Link>
-          <Link className="hover:text-[#ffcc00]" to="/contact">
+          <Link className="hover:text-[#ffcc00]" to="/contactpage">
             Contact
           </Link>
-          <Link to="/login" className="hover:bg-[#ff9900]/80 bg-[#ffcc00] p-3 rounded-xl text-slate-700 transition-colors duration-300">
+          <Link to="/auth" className="hover:bg-[#ff9900]/80 bg-[#ffcc00] p-3 rounded-xl text-slate-700 transition-colors duration-300">
             Login / Sign Up
           </Link>
         </div>

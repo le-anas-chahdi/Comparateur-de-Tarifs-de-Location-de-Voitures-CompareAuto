@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import Menu from './Menu'; 
 import './ChangePassword.css';
 import Navbar from '../../components/layout/Navbar';
+import { TextField } from "@mui/material";
+import SideBarMenu from '../../components/SideBarMenu'
 
 const ChangePassword = () => {
     const [oldPassword, setOldPassword] = useState('');
@@ -50,50 +52,82 @@ const ChangePassword = () => {
     };
 
     return (
-        <div>
-            <Navbar />
-            <div className="change-password-container">
-                <Menu /> 
-                <h2>Changer Mot de Passe</h2>
-                <form onSubmit={handleChangePassword}>
-                    <div className="form-group">
-                        <label htmlFor="oldPassword">Ancien Mot de Passe</label>
-                        <input
-                            type="password"
-                            id="oldPassword"
-                            value={oldPassword}
-                            onChange={(e) => setOldPassword(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="newPassword">Nouveau Mot de Passe</label>
-                        <input
-                            type="password"
-                            id="newPassword"
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                            required
-                        />
-                        <small>Le mot de passe doit contenir au moins 6 caractères.</small>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="confirmPassword">Confirmer le Nouveau Mot de Passe</label>
-                        <input
-                            type="password"
-                            id="confirmPassword"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            required
-                        />
-                    </div>
-                    {error && <div className="error">{error}</div>}
-                    {success && <div className="success">{success}</div>}
-                    <button type="submit">Changer Mot de Passe</button>
-                </form>
-            </div>
-        </div>
-        );
-};
-
-export default ChangePassword;
+        <>
+          <Navbar />
+          <SideBarMenu />
+          <section className="flex justify-center xl:pt-28">
+            <form
+              className="2xl:w-[40%] lg:w-[50%] sm:w-[50%] w-full md:shadow-2xl space-y-5 text-slate-800 2xl:p-20 xl:p-16 p-8 flex flex-col items-center"
+              onSubmit={handleChangePassword}
+            >
+              <h2 className="font-semibold 2xl:text-5xl xl:text-4xl lg:text-3xl 2xl:mb-2 mb-1 md:text-xl text-lg">
+                CHANGER MOT DE PASSE
+              </h2>
+              <TextField
+                type="password"
+                required
+                fullWidth
+                label="Ancien mot de passe"
+                value={oldPassword}
+                sx={outlinedInputStyles}
+                onChange={(e) => setOldPassword(e.target.value)}
+              />
+              <TextField
+                type="password"
+                required
+                fullWidth
+                label="Nouveau mot de passe"
+                value={newPassword}
+                sx={outlinedInputStyles}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+              <TextField
+                type="password"
+                required
+                fullWidth
+                label="Confirmer le nouveau mot de passe"
+                value={confirmPassword}
+                sx={outlinedInputStyles}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+              {success && <p className="text-green-500 text-sm text-center">{success}</p>}
+              <button
+                type="submit"
+                className="hover:bg-[#ff9900] bg-[#ffcc00] rounded-xl text-slate-800 transition-colors duration-300"
+              >
+                <p className="lg:py-4 lg:px-24 py-2 px-11 2xl:text-2xl xl:text-lg md:text-base text-sm">
+                  Changer mot de passe
+                </p>
+              </button>
+            </form>
+          </section>
+        </>
+      );
+    };
+    
+    const outlinedInputStyles = {
+      "& .MuiOutlinedInput-root": {
+        "& fieldset": {
+          borderColor: "#1e293b",
+        },
+        "&:hover fieldset": {
+          borderColor: "#ffcc00",
+        },
+        "&.Mui-focused fieldset": {
+          borderColor: "#ffcc00",
+        },
+      },
+      "& .MuiInputLabel-outlined": {
+        color: "#1e293b",
+      },
+      "&:hover .MuiInputLabel-outlined": {
+        color: "#ffcc00",
+      },
+      "& .MuiInputLabel-outlined.Mui-focused": {
+        color: "#ffcc00",
+        fontWeight: "bold",
+      },
+    };
+    
+    export default ChangePassword;
