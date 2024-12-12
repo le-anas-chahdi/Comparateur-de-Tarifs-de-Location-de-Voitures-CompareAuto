@@ -8,7 +8,6 @@ const CommentCaMarchePage = () => {
   return (
     <div>
       <Navbar />
-      <h1>Comment ça marche</h1>
       <CommentCaMarche />
       <FeaturedCompanies />
       <Footer />
