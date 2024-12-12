@@ -51,8 +51,6 @@ const JobsPage = () => {
           Nous n'avons pas d'autres offres disponibles pour le moment. Restez à l'écoute !
         </p>
       </section>
-
-      <FeaturedCompanies />
       <Footer />
     </div>
   );

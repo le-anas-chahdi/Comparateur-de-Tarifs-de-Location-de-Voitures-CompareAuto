@@ -9,7 +9,6 @@ import SignUp from './pages/private/SignUp';
 import Auth from './pages/private/Auth';
 import Profile from './pages/private/Profile';
 import ChangePassword from './pages/private/ChangePassword';
-import Reservations from './pages/private/Reservations';
 import Jobs from './components/sections/Jobs';
 import LegalPage from './pages/public/LegalPage';
 import PrivacyPolicyPage from './pages/public/PrivacyPolicyPage';
@@ -35,7 +34,6 @@ const App = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/personalinfo" element={<PersonalInfo />} />
         <Route path="/changepassword" element={<ChangePassword />} />
-        <Route path="/reservations" element={<Reservations />} />
         <Route path="/subscriptions" element={<Subscriptions />} />
         <Route path="/jobs" element={<Jobs />} />
         <Route path="/legal" element={<LegalPage />} />
