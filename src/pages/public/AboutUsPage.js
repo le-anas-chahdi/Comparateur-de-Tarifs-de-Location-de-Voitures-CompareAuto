@@ -8,7 +8,6 @@ const AboutUsPage = () => {
   return (
     <div>
       <Navbar />
-      <h1>About us</h1>
       <AboutUs />
       <FeaturedCompanies />
       <Footer />
