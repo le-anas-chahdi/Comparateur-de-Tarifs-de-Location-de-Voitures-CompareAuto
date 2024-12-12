@@ -9,7 +9,6 @@ const LegalPage = () => {
     <div className="legal-page">
       <Navbar />
       <Legal />
-      <FeaturedCompanies />
       <Footer />
     </div>
   );

@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { auth, db, storage } from '../../config/firebaseConfig';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import Menu from './Menu';
 import Navbar from '../../components/layout/Navbar';
-import SideBarMenu from '../../components/SideBarMenu';
+import SideBarMenu from '../../components/layout/SideBarMenu';
 
 const Profile = () => {
     const [profileImage, setProfileImage] = useState(null); // URL de l'image de profil

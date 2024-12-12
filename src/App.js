@@ -15,7 +15,8 @@ import LegalPage from './pages/public/LegalPage';
 import PrivacyPolicyPage from './pages/public/PrivacyPolicyPage';
 import Subscriptions from './pages/private/Subscriptions';
 import PersonalInfo from './pages/private/PersonalInfo';
-import SideBarMenu from './components/SideBarMenu';
+import SideBarMenu from './components/layout/SideBarMenu';
+import FAQPage from './pages/public/FAQPage'
 
 
 
@@ -37,9 +38,10 @@ const App = () => {
         <Route path="/reservations" element={<Reservations />} />
         <Route path="/subscriptions" element={<Subscriptions />} />
         <Route path="/jobs" element={<Jobs />} />
-        <Route path="/mentions-legales" element={<LegalPage />} />
-        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+        <Route path="/legal" element={<LegalPage />} />
+        <Route path="/privacypolicypage" element={<PrivacyPolicyPage />} />
         <Route path="/sidebarmenu" element={<SideBarMenu />} />
+        <Route path="/faqpage" element={<FAQPage />} />
       </Routes>
     </Router>
   );

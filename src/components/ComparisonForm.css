@@ -1,9 +1,7 @@
 /* Container for the whole form */
 .comparison-form-container {
-    max-width: 600px;
     margin: 0 auto;
-    padding: 30px;
-    background-color: #f9f9f9;
+    background-color: white;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     font-family: 'Arial', sans-serif;
@@ -51,12 +49,11 @@
 
 /* Styling the submit button */
 .btn-submit {
-    background-color: #007bff;
-    color: white;
+    background-color:#FFCC00;
+    color: #334155 ;
     padding: 12px;
     border: none;
     border-radius: 5px;
-    font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
     width: 100%;
@@ -64,7 +61,7 @@
 }
 
 .btn-submit:hover {
-    background-color: #0056b3;
+    background-color: #ff9900;
 }
 
 /* Styling for the checkboxes and their labels */

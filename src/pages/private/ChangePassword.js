@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import { auth } from '../../config/firebaseConfig';
 import { EmailAuthProvider, reauthenticateWithCredential, updatePassword, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import Menu from './Menu'; 
-import './ChangePassword.css';
 import Navbar from '../../components/layout/Navbar';
 import { TextField } from "@mui/material";
-import SideBarMenu from '../../components/SideBarMenu'
+import SideBarMenu from '../../components/layout/SideBarMenu'
 
 const ChangePassword = () => {
     const [oldPassword, setOldPassword] = useState('');

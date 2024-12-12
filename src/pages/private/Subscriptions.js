@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '../../config/firebaseConfig';
-import Menu from './Menu'; // Importation du menu
-import './Subscriptions.css';
 import Navbar from '../../components/layout/Navbar';
 import { Divider } from "@mui/material";
-import SideBarMenu from '../../components/SideBarMenu'
+import SideBarMenu from '../../components/layout/SideBarMenu'
 
 const Subscription = () => {
     const [subscriptionType, setSubscriptionType] = useState(null);

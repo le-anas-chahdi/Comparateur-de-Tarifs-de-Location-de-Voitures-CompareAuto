@@ -202,9 +202,9 @@ const ComparisonForm = () => {
     };
 
     return (
-        <div className="comparison-form-container">
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
+        <div className="comparison-form-container sm:w-[70%]  lg:w-[50%] xl:w-[40%] min-h-[700px]  px-20 py-20">
+            <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
+                <div className="form-group gap-2">
                     <label>Duration:</label>
                     <input
                         type="number"
@@ -216,7 +216,7 @@ const ComparisonForm = () => {
                     <select
                         value={durationScale}
                         onChange={(e) => setDurationScale(e.target.value)}
-                        className="form-control"
+                        className="form-control mt-3"
                     >
                         <option value="minutes">Minutes</option>
                         <option value="hours">Hours</option>
@@ -255,27 +255,6 @@ const ComparisonForm = () => {
                         className="form-control"
                     />
                 </div>
-    
-                <div className="checkbox-group">
-                    <input
-                        type="checkbox"
-                        checked={isSubscribed}
-                        onChange={(e) => setIsSubscribed(e.target.checked)}
-                    />
-                    <label>Are you a Citiz subscriber?</label>
-                </div>
-    
-                {!isSubscribed && (
-                    <div className="checkbox-group">
-                        <input
-                            type="checkbox"
-                            checked={showSubscriberPrices}
-                            onChange={(e) => setShowSubscriberPrices(e.target.checked)}
-                        />
-                        <label>Citiz subscriber prices are more advantageous. Would you like to see both prices?</label>
-                    </div>
-                )}
-    
                 <button type="submit" className="btn-submit">Submit</button>
             </form>
     

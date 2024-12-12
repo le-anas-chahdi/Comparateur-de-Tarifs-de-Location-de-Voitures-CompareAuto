@@ -10,12 +10,14 @@ const Footer = () => {
       <div className="flex gap-5 text-white justify-center lg:text-base sm:text-sm text-xs">
         <Link to="/comparison">Comparison</Link>
         <Link to="/aboutuspage">About Us</Link>
-        <div className="cursor-pointer">FAQ</div>
-        <div className="cursor-pointer">Privacy</div>
-        <div className="cursor-pointer">Policy</div>
+        <Link to="/faqpage">FAQ</Link>
+        <Link to="/privacypolicypage">Privacy policy</Link>
+        <Link to="/jobs">Recrutement</Link>
+        <Link to="/legal">Mentions légales</Link>
+        
       </div>
       <div className="text-white flex justify-center flex-col items-center gap-2 lg:text-base sm:text-sm text-xs">
-        Contact us:
+        Contactez nous:
         <a href="mailto:contact@carrentalcompare.com">
           contact@carrentalcompare.com
         </a>

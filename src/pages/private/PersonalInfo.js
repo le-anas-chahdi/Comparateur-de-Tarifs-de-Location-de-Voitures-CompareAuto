@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { auth, db } from '../../config/firebaseConfig'; 
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import Menu from './Menu'; 
 import Navbar from '../../components/layout/Navbar';
-import SideBarMenu from '../../components/SideBarMenu'
+import SideBarMenu from '../../components/layout/SideBarMenu'
 
 const PersonalInfo = () => {
     const [userInfo, setUserInfo] = useState(null);
