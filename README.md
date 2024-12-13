@@ -1,70 +1,144 @@
-# Getting Started with Create React App
+### 🚗 Comparateur de Tarifs de Location de Voitures: **CompareAuto**
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Bienvenue ! Ce projet est une application interactive permettant aux utilisateurs de comparer les tarifs de location de voitures pour divers prestataires en fonction des besoins spécifiques, comme la durée, la distance, et le type de véhicule.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 📋 Table des matières:
 
-### `npm start`
+- [🎯 Aperçu](#-aperçu)
+- [🌟 Caractéristiques](#-caractéristiques)
+- [🗂️ Structure du projet](#️-structure-du-projet)
+- [✅ Installation](#-installation)
+- [▶️ Démarrage](#️-démarrage)
+- [🔑 Authentification Firebase](#-authentification-firebase)
+- [🛠️ Technologies utilisées](#️-technologies-utilisées)
+- [📦 Dépendances principales](#-dépendances-principales)
+- [🤝 Contributions](#-contributions)
+- [📄 Licence](#-licence)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🎯 Aperçu
 
-### `npm test`
+L'application fournit une solution intuitive et fiable pour :
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Comparer les tarifs de location pour des prestataires comme Leo&Go, Europcar, Citiz, Avis, Hertz, et Sixt.
+- Générer des graphiques interactifs basés sur différents scénarios (durée, distance, type de véhicule).
+- Authentifier les utilisateurs et gérer leurs profils.
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🌟 Caractéristiques
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Interface utilisateur moderne** avec un formulaire intuitif pour définir les scénarios.
+- **Calculs précis des tarifs**, prenant en compte les abonnements, les coûts horaires, journaliers, hebdomadaires, et kilométriques.
+- **Graphiques dynamiques** permettant de visualiser les résultats en temps réel.
+- **Scénarios prédéfinis** affichés par défaut pour démontrer les capacités de l'application.
+- **Responsiveness complète**, optimisée pour les ordinateurs, tablettes, et smartphones.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## 🗂️ Structure du projet
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Arborescence principale du projet :
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+lifprojet-main/
+│
+├── public/
+├── src/
+│   ├── components/
+│   │   ├── forms/              # Formulaires utilisateur
+│   │   ├── graphs/             # Graphiques interactifs
+│   │   ├── layout/             # Composants de mise en page (Navbar, Footer)
+│   ├── data/                   # Données tarifaires
+│   │   ├── leoAndGoPricing.js
+│   │   ├── citizPricing.js
+│   │   └── autres fichiers...
+│   ├── pages/                  # Pages principales (Accueil, etc.)
+│   ├── utils/                  # Fonctions utilitaires (calculs tarifaires)
+├── package.json
+├── README.md
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## ✅ Installation
 
-## Learn More
+1. **Cloner le projet**
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+   ```bash
+   git clone https://forge.univ-lyon1.fr/p2308078/lifprojet.git
+   cd compareauto
+   ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+2. **Installer les dépendances**
 
-### Code Splitting
+   ```bash
+   npm install
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+3. **Configurer Firebase**
+   Ajoutez vos clés Firebase dans un fichier `.env` à la racine :
+   ```env
+   REACT_APP_API_KEY=Votre_API_KEY
+   REACT_APP_AUTH_DOMAIN=Votre_AUTH_DOMAIN
+   ...
+   ```
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## ▶️ Démarrage
 
-### Making a Progressive Web App
+Lancez le projet en local :
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```bash
+npm start
+```
 
-### Advanced Configuration
+Accédez à l'application sur `http://localhost:3000`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+## 🔑 Authentification Firebase
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- **Options d'authentification** :
+  - Par e-mail et mot de passe.
+  - Via Facebook avec **Meta for Developers**.
+- **Gestion des profils utilisateurs** avec stockage des images dans **Firestore**.
 
-### `npm run build` fails to minify
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 🛠️ Technologies utilisées
+
+### Frontend
+
+- **React** : Création d'une interface réactive et modulaire.
+- **Chart.js** : Génération de graphiques interactifs.
+- **CSS Modules** : Styles scindés pour une meilleure organisation.
+- **Axios** : Gestion des requêtes HTTP.
+
+### Backend
+
+- **Firebase** : Gestion des données en temps réel et authentification.
+
+---
+
+## 📦 Dépendances principales
+
+- **React Router DOM** : Navigation entre les pages.
+- **Chart.js** : Visualisation des données.
+- **Firebase** : Intégration pour l'authentification et le stockage.
+
+---
+
+## 🤝 Contributions
+
+Nous accueillons avec plaisir vos contributions ! N'hésitez pas à ouvrir des issues ou à soumettre des pull requests.
+
+---
+
+## 📄 Licence
+
+Ce projet est sous licence MIT.
