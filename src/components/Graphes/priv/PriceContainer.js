@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 const PriceContainer = () => {
     const [carType, setCarType] = useState("catS");
-    const [kilometers, setKilometers] = useState("50");
+    const [kilometers, setKilometers] = useState("0");
 
     const carTypes = [
         { value: "catS", label: "Citadine" },

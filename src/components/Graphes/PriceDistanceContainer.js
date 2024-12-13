@@ -5,7 +5,7 @@ import PriceContainer from './priv/PriceContainer';
 import { useState } from 'react';
 
 const PriceDistanceContainer = () => {
-    const [time, setTimer] = useState("12");
+    const [time, setTimer] = useState("13");
     const [typeofTime, setTypeofTime] = useState("days");
     const [carType, setCarType] = useState("catS");
 

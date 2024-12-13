@@ -82,14 +82,6 @@ const citizPricing = {
         reducedKmRate: 0.27, 
         reducedKmThreshold: 100 },
 
-      utilityVehicles3m3: {
-          unlockFee: 0, 
-          durations: [
-              { duration: 0, price: 0, kmIncluded: 100000 }
-          ],
-          extraKmRate: 0 // Extra km cost after included km
-      },
-
       catXXL: { 
         hourly: 5, 
         daily: 44, 

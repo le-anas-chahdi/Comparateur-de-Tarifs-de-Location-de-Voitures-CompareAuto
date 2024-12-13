@@ -1,52 +1,87 @@
-import citizPricing from '../../data/citizPricing';
+import citizPricing from "../../data/citizPricing";
 
 const MINUTES_IN_HOUR = 60;
 const MINUTES_IN_DAY = 1440;
 const MINUTES_IN_WEEK = 10080;
 
-const citizPriceCalculation = (pricingData, carType, durationInMinutes, kilometers) => {
-  const carPricing = pricingData[carType];
-  if (!carPricing) {
+/**
+ * Core function to calculate the price based on the provided pricing model.
+ * @param {Object} carPricing - Pricing model (subscription or no subscription).
+ * @param {string} carType - Type of car (e.g., catS, catM, catL).
+ * @param {number} durationInMinutes - Duration of rental in minutes.
+ * @param {number} distanceInKm - Distance traveled in kilometers.
+ * @returns {number} - Calculated cost.
+ */
+const calculateCost = (carPricing, carType, durationInMinutes, distanceInKm) => {
+  const pricing = carPricing[carType];
+
+  if (!pricing) {
     console.error(`Invalid car type: ${carType}`);
-    return 0; // Return 0 for invalid car type
+    return Infinity; // Invalid car type returns a very high value to exclude it
   }
 
-  const { hourly, daily, weekly, kmRate, reducedKmRate, reducedKmThreshold } = carPricing;
+  const { hourly, daily, weekly, kmRate, reducedKmRate, reducedKmThreshold } = pricing;
 
   // Convert duration
-  const durationInHours = durationInMinutes / MINUTES_IN_HOUR;
-  const totalDays = Math.ceil(durationInHours / 24);
-  const totalWeeks = Math.floor(totalDays / 7);
-  const remainingDays = totalDays % 7;
-  const remainingHours = durationInHours % 24;
+  const totalWeeks = Math.floor(durationInMinutes / MINUTES_IN_WEEK);
+  const remainingMinutesAfterWeeks = durationInMinutes % MINUTES_IN_WEEK;
 
-  // Calculate kilometer cost
+  const totalDays = Math.floor(remainingMinutesAfterWeeks / MINUTES_IN_DAY);
+  const remainingMinutesAfterDays = remainingMinutesAfterWeeks % MINUTES_IN_DAY;
+
+  const totalHours = Math.ceil(remainingMinutesAfterDays / MINUTES_IN_HOUR);
+
+  // Exact costs for the given durations
+  const exactWeekCost = totalWeeks * weekly;
+  const exactDayCost = totalDays * daily;
+  const exactHourCost = totalHours * hourly;
+  const exactDurationCost = exactWeekCost + exactDayCost + exactHourCost;
+
+  // Costs with "+1" durations
+  const weekPlusOneCost = (totalWeeks + 1) * weekly;
+  const dayPlusOneCost = (totalDays + 1) * daily + totalWeeks * weekly;
+  const hourPlusOneCost = (totalHours + 1) * hourly + totalDays * daily + totalWeeks * weekly;
+
+  // Find the minimum duration cost
+  const durationCost = Math.min(
+    exactDurationCost,
+    weekPlusOneCost,
+    dayPlusOneCost,
+    hourPlusOneCost
+  );
+
+  // Distance cost calculation
   const kmCost =
-    kilometers <= reducedKmThreshold
-      ? kilometers * kmRate
-      : reducedKmThreshold * kmRate + (kilometers - reducedKmThreshold) * reducedKmRate;
+    distanceInKm <= reducedKmThreshold
+      ? distanceInKm * kmRate
+      : reducedKmThreshold * kmRate + (distanceInKm - reducedKmThreshold) * reducedKmRate;
 
-  // Calculate various pricing scenarios
-  const durationCosts = [
-    hourly * durationInHours, // Entirely hourly
-    daily * totalDays, // Entirely daily
-    weekly * totalWeeks, // Entirely weekly
-    weekly * totalWeeks + daily * remainingDays, // Weekly + daily
-    weekly * totalWeeks + hourly * remainingHours, // Weekly + hourly
-    weekly * totalWeeks + daily * remainingDays + hourly * remainingHours, // Weekly + daily + hourly
-  ];
-
-  // Add kilometer cost to each option and find the minimum
-  const totalCosts = durationCosts.map((cost) => cost + kmCost);
-  return parseFloat(Math.min(...totalCosts).toFixed(2));
+  // Total cost
+  return durationCost + kmCost;
 };
 
-// No subscription pricing
+/**
+ * Calculate pricing without subscription.
+ * @param {string} carType - Type of car.
+ * @param {number} durationInMinutes - Duration in minutes.
+ * @param {number} kilometers - Distance in kilometers.
+ * @returns {number} - Calculated price.
+ */
 export const noSubscriptionPricing = (carType, durationInMinutes, kilometers) => {
-  return citizPriceCalculation(citizPricing.noSubscription, carType, durationInMinutes, kilometers);
+  return parseFloat(
+    calculateCost(citizPricing.noSubscription, carType, durationInMinutes, kilometers).toFixed(2)
+  );
 };
 
-// Subscription pricing
+/**
+ * Calculate pricing with subscription.
+ * @param {string} carType - Type of car.
+ * @param {number} durationInMinutes - Duration in minutes.
+ * @param {number} kilometers - Distance in kilometers.
+ * @returns {number} - Calculated price.
+ */
 export const subscriptionPricing = (carType, durationInMinutes, kilometers) => {
-  return citizPriceCalculation(citizPricing.subscription, carType, durationInMinutes, kilometers);
+  return parseFloat(
+    calculateCost(citizPricing.subscription, carType, durationInMinutes, kilometers).toFixed(2)
+  );
 };

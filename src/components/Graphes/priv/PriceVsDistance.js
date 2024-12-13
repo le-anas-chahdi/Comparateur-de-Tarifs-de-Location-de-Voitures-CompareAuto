@@ -51,7 +51,7 @@ const PriceVsDistance = ({ time, typeoftime, carType }) => {
     const timeInMinutes = convertDurationToMinutes(time || '0', typeoftime);
 
     const generatePriceData = () => {
-        const distances = Array.from({ length: 41 }, (_, i) => i * 2500);
+        const distances = Array.from({ length: 41 }, (_, i) => i * 250);
         const datasets = [];
 
     
@@ -88,7 +88,7 @@ const PriceVsDistance = ({ time, typeoftime, carType }) => {
             data: distances.map(km => 
                 parseFloat(noSubscriptionPricing(carType, timeInMinutes, km))
             ),
-            borderColor: '#FFB900',
+            borderColor: '#007bff',
             tension: 0.4,
             borderWidth: 2,
             fill: false
@@ -101,7 +101,7 @@ const PriceVsDistance = ({ time, typeoftime, carType }) => {
             data: distances.map(km => 
                 parseFloat(subscriptionPricing(carType, timeInMinutes, km))
             ),
-            borderColor: '#FFB900',
+            borderColor: '#28a745',
             tension: 0.4,
             borderWidth: 2,
             fill: false
@@ -126,7 +126,7 @@ const PriceVsDistance = ({ time, typeoftime, carType }) => {
             data: distances.map(km => 
                 parseFloat(HertzPriceCalculation(carType, timeInMinutes, km))
             ),
-            borderColor: '#FF69B4',
+            borderColor: '#007FFF',
             tension: 0.4,
             borderWidth: 2,
             fill: false
@@ -139,7 +139,7 @@ const PriceVsDistance = ({ time, typeoftime, carType }) => {
             data: distances.map(km => 
                 parseFloat(sixtPriceCalculation(carType, timeInMinutes, km))
             ),
-            borderColor: '#FF69B4',
+            borderColor: '#800080',
             tension: 0.4,
             borderWidth: 2,
             fill: false
@@ -152,7 +152,7 @@ const PriceVsDistance = ({ time, typeoftime, carType }) => {
             data: distances.map(km => 
                 parseFloat(boltPriceCalculation(carType, timeInMinutes, km))
             ),
-            borderColor: '#FF69B4',
+            borderColor: '#32CD32',
             tension: 0.4,
             borderWidth: 2,
             fill: false

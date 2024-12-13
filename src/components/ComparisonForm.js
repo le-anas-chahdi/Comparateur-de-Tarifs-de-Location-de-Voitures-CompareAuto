@@ -12,6 +12,7 @@ import HertzPriceCalculation from '../utils/pricingCalculations/hertzPriceCalcul
 import sixtPriceCalculation from '../utils/pricingCalculations/sixtPriceCalculation';
 import { boltPriceCalculation } from '../utils/pricingCalculations/boltPriceCalculation';
 
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -25,6 +26,7 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
+// Helper function to convert duration to minutes
 const convertDurationToMinutes = (duration, scale) => {
   const scales = { minutes: 1, hours: 60, days: 1440, weeks: 10080, months: 43800 };
   return parseFloat(duration) * (scales[scale] || 1);
@@ -37,8 +39,25 @@ const ComparisonForm = () => {
   const [kilometers, setKilometers] = useState('');
   const [priceData, setPriceData] = useState(null);
 
+  const safeCalculate = (calculateFn, carType, durationInMinutes, kilometersValue) => {
+    try {
+      const result = calculateFn(carType, durationInMinutes, kilometersValue);
+      return result?.totalCost || result || 0; // Return result or fallback to 0
+    } catch (error) {
+      console.error(`${calculateFn.name} Error:`, error);
+      return 0; // Return 0 in case of an error
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Input validation
+    if (!duration || duration <= 0 || !kilometers || kilometers < 0) {
+      alert('Please enter valid duration and kilometers.');
+      return;
+    }
+
     const durationInMinutes = convertDurationToMinutes(duration, durationScale);
     const kilometersValue = parseFloat(kilometers) || 0;
 
@@ -46,109 +65,25 @@ const ComparisonForm = () => {
     const data = [];
     const borderColor = [];
 
-    try {
-      // Leo&Go
-      const leoAndGoPrice = leoAndGoPricingCalculation(carType, durationInMinutes, kilometersValue);
-      labels.push('Leo&Go');
-      data.push(leoAndGoPrice?.totalCost || leoAndGoPrice || 0);
-      borderColor.push('#FF6B00');
-    } catch (error) {
-      console.error('Leo&Go Error:', error);
-      labels.push('Leo&Go');
-      data.push(0);
-      borderColor.push('#FF6B00');
-    }
+    // Define companies with their calculation functions and colors
+    const companies = [
+      { name: 'Leo&Go', calculate: leoAndGoPricingCalculation, color: '#FF6B00' },
+      { name: 'Avis', calculate: avisPriceCalculation, color: '#FF69B4' },
+      { name: 'Europcar', calculate: europcarPriceCalculation, color: '#ff5733' },
+      { name: 'Citiz (No Subscription)', calculate: noSubscriptionPricing, color: '#007bff' },
+      { name: 'Hertz', calculate: HertzPriceCalculation, color: '#007FFF' },
+      { name: 'Sixt', calculate: sixtPriceCalculation, color: '#800080' },
+      { name: 'Citiz (Subscription)', calculate: subscriptionPricing, color: '#28a745' },
+      { name: 'Bolt', calculate: boltPriceCalculation, color: '#32CD32' },
+    ];
 
-    try {
-      // Citiz (No Subscription)
-      const citizNoSubPrice = noSubscriptionPricing(carType, durationInMinutes, kilometersValue);
-      labels.push('Citiz (No Subscription)');
-      data.push(citizNoSubPrice || 0);
-      borderColor.push('#007bff');
-    } catch (error) {
-      console.error('Citiz No Subscription Error:', error);
-      labels.push('Citiz (No Subscription)');
-      data.push(0);
-      borderColor.push('#007bff');
-    }
-
-    try {
-      // Citiz (Subscription)
-      const citizSubPrice = subscriptionPricing(carType, durationInMinutes, kilometersValue);
-      labels.push('Citiz (Subscription)');
-      data.push(citizSubPrice || 0);
-      borderColor.push('#28a745');
-    } catch (error) {
-      console.error('Citiz Subscription Error:', error);
-      labels.push('Citiz (Subscription)');
-      data.push(0);
-      borderColor.push('#28a745');
-    }
-
-    try {
-      // Avis
-      const avisPrice = avisPriceCalculation(carType, durationInMinutes, kilometersValue);
-      labels.push('Avis');
-      data.push(avisPrice || 0);
-      borderColor.push('#FF69B4');
-    } catch (error) {
-      console.error('Avis Error:', error);
-      labels.push('Avis');
-      data.push(0);
-      borderColor.push('#FF69B4');
-    }
-
-    try {
-      // Europcar
-      const europcarPrice = europcarPriceCalculation(carType, durationInMinutes, kilometersValue);
-      labels.push('Europcar');
-      data.push(europcarPrice || 0);
-      borderColor.push('#ff5733');
-    } catch (error) {
-      console.error('Europcar Error:', error);
-      labels.push('Europcar');
-      data.push(0);
-      borderColor.push('#ff5733');
-    }
-
-    try {
-      // Hertz
-      const hertzPrice = HertzPriceCalculation(carType, durationInMinutes, kilometersValue);
-      labels.push('Hertz');
-      data.push(hertzPrice || 0);
-      borderColor.push('#007FFF');
-    } catch (error) {
-      console.error('Hertz Error:', error);
-      labels.push('Hertz');
-      data.push(0);
-      borderColor.push('#007FFF');
-    }
-
-    try {
-      // Sixt
-      const sixtPrice = sixtPriceCalculation(carType, durationInMinutes, kilometersValue);
-      labels.push('Sixt');
-      data.push(sixtPrice || 0);
-      borderColor.push('#800080');
-    } catch (error) {
-      console.error('Sixt Error:', error);
-      labels.push('Sixt');
-      data.push(0);
-      borderColor.push('#800080');
-    }
-
-    try {
-      // Bolt
-      const boltPrice = boltPriceCalculation(carType, durationInMinutes, kilometersValue);
-      labels.push('Bolt');
-      data.push(boltPrice || 0);
-      borderColor.push('#32CD32');
-    } catch (error) {
-      console.error('Bolt Error:', error);
-      labels.push('Bolt');
-      data.push(0);
-      borderColor.push('#32CD32');
-    }
+    // Calculate prices for all companies
+    companies.forEach(({ name, calculate, color }) => {
+      const price = safeCalculate(calculate, carType, durationInMinutes, kilometersValue);
+      labels.push(name);
+      data.push(price);
+      borderColor.push(color);
+    });
 
     setPriceData({
       labels,
@@ -189,7 +124,7 @@ const ComparisonForm = () => {
     <div className="comparison-form-container sm:w-[70%] lg:w-[50%] xl:w-[40%] min-h-[700px] px-20 py-20">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="form-group">
-          <label>Durée:</label>
+          <label>Duration:</label>
           <input
             type="number"
             value={duration}
