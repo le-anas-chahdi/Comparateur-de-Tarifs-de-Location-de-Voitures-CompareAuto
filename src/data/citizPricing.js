@@ -1,104 +1,84 @@
 const citizPricing = {
 
   noSubscription: {
-
-      verysmallCars: { 
-        hourly: 5,
+      //voitures type twingo
+      catS: { 
+        hourly: 5.5,
         daily: 39,
         weekly: 180, 
-        kmRate: 0.41, 
+        kmRate: 0.42, 
         reducedKmRate: 0.22, 
         reducedKmThreshold: 100 },
 
-      smallCars: { 
-        hourly: 5.5, 
+      //voitures type clio
+      catM: { 
+        hourly: 6, 
         daily: 45, 
         weekly: 210, 
-        kmRate: 0.41, 
+        kmRate: 0.42, 
         reducedKmRate: 0.22, 
         reducedKmThreshold: 100 },
 
-      compactCars: { hourly: 6, 
+      //voiture type 308 sw
+      catL: {
+        hourly: 6.5, 
         daily: 50, 
         weekly: 240, 
-        kmRate: 0.41, 
+        kmRate: 0.42, 
         reducedKmRate: 0.22, 
         reducedKmThreshold: 100 },
 
-      mpvCars: { 
-        hourly: 6.5, 
+      //voitures type scenic
+      catXL: { 
+        hourly: 7, 
         daily: 56, 
         weekly: 270, 
-        kmRate: 0.51, 
+        kmRate: 0.52, 
         reducedKmRate: 0.27, 
         reducedKmThreshold: 100 },
 
-      utilityVehicles3m3: {
-          unlockFee: 0, 
-          durations: [
-              { duration: 0, price: 0, kmIncluded: 100000 }
-          ],
-          extraKmRate: 0 // Extra km cost after included km
-      },
-
-      utilityVehicles6m3: { 
-        hourly: 7, 
+      //voiture type traffic
+      catXXL: { 
+        hourly: 7.5, 
         daily: 60, 
         weekly: 300, 
-        kmRate: 0.51, 
+        kmRate: 0.52, 
         reducedKmRate: 0.27, 
         reducedKmThreshold: 100 },
-
-        teslaCars: {
-          unlockFee: 0, 
-          durations: [
-              { duration: 0, price: 0, kmIncluded: 100000 }
-          ],
-          extraKmRate: 0 // Extra km cost after included km
-      },
-
-
-      airportCars: {
-        unlockFee: 0, 
-        durations: [
-            { duration: 0, price: 0, kmIncluded: 100000 }
-        ],
-        extraKmRate: 0 // Extra km cost after included km
-    }
 
   },
 
   subscription: {
 
-      verysmallCars: { 
-        hourly: 2.5, 
+      catS: { 
+        hourly: 3, 
         daily: 22, 
         weekly: 120, 
-        kmRate: 0.41, 
+        kmRate: 0.42, 
         reducedKmRate: 0.22, 
         reducedKmThreshold: 100 },
 
-      smallCars: { 
-        hourly: 3, 
+      catM: { 
+        hourly: 3.5, 
         daily: 27, 
         weekly: 150, 
-        kmRate: 0.41, 
+        kmRate: 0.42, 
         reducedKmRate: 0.22, 
         reducedKmThreshold: 100 },
 
-      compactCars: { 
-        hourly: 3.5, 
+      catL: { 
+        hourly: 4, 
         daily: 33, 
         weekly: 180, 
-        kmRate: 0.41, 
+        kmRate: 0.42, 
         reducedKmRate: 0.22, 
         reducedKmThreshold: 100 },
 
-      mpvCars: { 
-        hourly: 4, 
+      catXL: { 
+        hourly: 4.5, 
         daily: 38, 
         weekly: 210, 
-        kmRate: 0.51, 
+        kmRate: 0.52, 
         reducedKmRate: 0.27, 
         reducedKmThreshold: 100 },
 
@@ -110,31 +90,15 @@ const citizPricing = {
           extraKmRate: 0 // Extra km cost after included km
       },
 
-      utilityVehicles6m3: { 
-        hourly: 4.5, 
+      catXXL: { 
+        hourly: 5, 
         daily: 44, 
         weekly: 240, 
-        kmRate: 0.51, 
+        kmRate: 0.52, 
         reducedKmRate: 0.27, 
         reducedKmThreshold: 100 }
   },
 
-      teslaCars: {
-        unlockFee: 0, 
-        durations: [
-            { duration: 0, price: 0, kmIncluded: 100000 }
-        ],
-        extraKmRate: 0 // Extra km cost after included km
-    },
-
-
-    airportCars: {
-      unlockFee: 0, 
-      durations: [
-          { duration: 0, price: 0, kmIncluded: 100000 }
-      ],
-      extraKmRate: 0 // Extra km cost after included km
-    }
 };
 
 export default citizPricing;

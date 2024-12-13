@@ -1,37 +1,71 @@
 import leoAndGoPricing from '../../data/leoAndGoPricing';
 
-// Function to calculate the total cost for Leo&Go
+const MINUTES_IN_DAY = 1440;
+const MAX_DAYS = 14; // Maximum duration supported by Leo&Go
+
 export const leoAndGoPricingCalculation = (carType, durationInMinutes, kilometers) => {
     const carPricing = leoAndGoPricing[carType];
-    let selectedPricing = null;
-    let message = '';
+    if (!carPricing) {
+        throw new Error(`Invalid car type: ${carType}`);
+    }
 
-    // Find the appropriate pricing based on the duration
-    for (let i = 0; i < carPricing.durations.length; i++) {
-        if (durationInMinutes <= carPricing.durations[i].duration) {
-            selectedPricing = carPricing.durations[i];
-            break;
+    const { unlockFee, durations, extraKmRate } = carPricing;
+
+    // Convert duration to days for comparison
+    const durationInDays = Math.ceil(durationInMinutes / MINUTES_IN_DAY);
+
+    // If the duration exceeds the maximum limit
+    if (durationInDays > MAX_DAYS) {
+        return {
+            totalCost: null,
+            message: `For durations exceeding ${MAX_DAYS} days, please contact Leo&Go directly.`,
+        };
+    }
+
+    // Initialize the best price as infinity
+    let bestPrice = Infinity;
+
+    // Iterate through all listed durations
+    durations.forEach(({ duration, price, kmIncluded }) => {
+        // Full duration fits within this tier
+        if (duration * MINUTES_IN_DAY >= durationInMinutes) {
+            const extraKmCost = Math.max(0, kilometers - kmIncluded) * extraKmRate;
+            const totalCost = unlockFee + price + extraKmCost;
+            bestPrice = Math.min(bestPrice, totalCost);
+        }
+    });
+
+    // Handle durations that exceed any single tier but are within the 14-day limit
+    for (let i = 0; i < durations.length; i++) {
+        const { duration: fullDays, price: fullPrice, kmIncluded: includedKm } = durations[i];
+        const remainingMinutes = durationInMinutes - fullDays * MINUTES_IN_DAY;
+
+        // If the duration exceeds the current tier
+        if (remainingMinutes > 0) {
+            // Calculate the cost for the full tier
+            const extraKmCost = Math.max(0, kilometers - includedKm) * extraKmRate;
+
+            // Handle remaining time as additional cost
+            const nextTier = durations[i + 1];
+            let remainingCost = 0;
+
+            if (nextTier) {
+                // Use the next tier's price for remaining time
+                remainingCost =
+                    (remainingMinutes / (nextTier.duration * MINUTES_IN_DAY)) * nextTier.price;
+            } else {
+                // Fall back to the last tier's price for extra time
+                remainingCost =
+                    (remainingMinutes / MINUTES_IN_DAY) * durations[durations.length - 1].price;
+            }
+
+            const totalCost = unlockFee + fullPrice + remainingCost + extraKmCost;
+            bestPrice = Math.min(bestPrice, totalCost);
         }
     }
 
-    // If no exact match, use the last pricing option (for long durations)
-    if (!selectedPricing) {
-        selectedPricing = carPricing.durations[carPricing.durations.length - 1];
-        message = 'For durations longer than this, please contact Leo&Go directly for pricing.';
-    }
-
-    // Calculate the base price
-    let totalCost = selectedPricing.price + carPricing.unlockFee;
-
-    // Calculate additional cost if kilometers exceed the included amount
-    if (kilometers > selectedPricing.kmIncluded) {
-        const extraKm = kilometers - selectedPricing.kmIncluded;
-        totalCost += extraKm * carPricing.extraKmRate;
-    }
-
-    // Return the total cost along with the message if applicable
     return {
-        totalCost: totalCost.toFixed(2), // Return the total cost formatted to 2 decimal places
-        message: message // Return the message (empty if not applicable)
+        totalCost: parseFloat(bestPrice.toFixed(2)),
+        message: null, // No error message if calculation succeeds
     };
 };

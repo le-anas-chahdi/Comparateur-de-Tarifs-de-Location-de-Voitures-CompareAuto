@@ -1,43 +1,65 @@
-import hertzPricing from './hertzPricing';
+import hertzPricing from '../../data/hertzPricing'; // Assuming pricing data is in a file
 
-const calculateHertzPrice = (category, model, days, extraKm = 0) => {
-  // Vérification si la catégorie existe
-  if (!hertzPricing[category]) {
-    throw new Error(`La catégorie "${category}" n'existe pas dans Hertz Pricing.`);
+// Constants
+const MINUTES_IN_DAY = 1440;
+const MINUTES_IN_WEEK = 10080;
+const MINUTES_IN_MONTH = 43800; // Approximate: 30.42 days in a month
+const FUEL_PRICE_PER_LITER = 1.85; // Static fuel price in €/liter
+
+/**
+ * Calculate the most advantageous price for Hertz rentals.
+ *
+ * @param {string} carType - The category of the car (e.g., catS, catM, etc.).
+ * @param {number} durationInMinutes - The rental duration in minutes.
+ * @param {number} kilometers - The number of kilometers driven.
+ * @returns {number} The most advantageous price, rounded to 2 decimals.
+ */
+const HertzPriceCalculation = (carType, durationInMinutes, kilometers) => {
+  const carPricing = hertzPricing[carType];
+
+  if (!carPricing) {
+    throw new Error(`Invalid car type: ${carType}`);
   }
 
-  // Recherche du modèle dans la catégorie
-  const vehicle = hertzPricing[category].find((v) => v.model.includes(model));
-  if (!vehicle) {
-    throw new Error(`Le modèle "${model}" n'existe pas dans la catégorie "${category}".`);
-  }
+  const { dailyRate, weeklyRate, monthlyRate, fuelConsumption } = carPricing;
 
-  const { dailyRate, kmIncluded, pricePerKm } = vehicle;
+  const durationInDays = durationInMinutes / MINUTES_IN_DAY;
+  const durationInWeeks = durationInMinutes / MINUTES_IN_WEEK;
+  const durationInMonths = durationInMinutes / MINUTES_IN_MONTH;
 
-  // Calcul du tarif de base
-  const basePrice = dailyRate * days;
+  // Calculate total fuel cost
+  const totalFuelCost = (kilometers / 100) * fuelConsumption * FUEL_PRICE_PER_LITER;
 
-  // Gestion des kilomètres supplémentaires
-  let extraKmCost = 0;
-  if (kmIncluded !== "Illimité" && extraKm > kmIncluded) {
-    extraKmCost = (extraKm - kmIncluded) * pricePerKm;
-  }
+  // Possible pricing scenarios
+  const pricingOptions = [];
 
-  // Prix total
-  const totalPrice = basePrice + extraKmCost;
+  // 1. Entirely daily rate
+  pricingOptions.push(dailyRate * Math.ceil(durationInDays) + totalFuelCost);
 
-  return {
-    category,
-    model,
-    days,
-    basePrice: basePrice.toFixed(2),
-    extraKmCost: extraKmCost.toFixed(2),
-    totalPrice: totalPrice.toFixed(2),
-  };
+  // 2. Entirely weekly rate
+  pricingOptions.push(weeklyRate * Math.ceil(durationInWeeks) + totalFuelCost);
+
+  // 3. Entirely monthly rate
+  pricingOptions.push(monthlyRate * Math.ceil(durationInMonths) + totalFuelCost);
+
+  // 4. Combination of weeks + remaining days
+  const fullWeeks = Math.floor(durationInDays / 7);
+  const remainingDays = durationInDays % 7;
+  pricingOptions.push(
+    fullWeeks * weeklyRate + Math.ceil(remainingDays) * dailyRate + totalFuelCost
+  );
+
+  // 5. Combination of months + remaining weeks
+  const fullMonths = Math.floor(durationInDays / 30.42); // Average days in a month
+  const remainingWeeks = (durationInDays % 30.42) / 7;
+  pricingOptions.push(
+    fullMonths * monthlyRate + Math.ceil(remainingWeeks) * weeklyRate + totalFuelCost
+  );
+
+  // Find the most advantageous option
+  const mostAdvantageousPrice = Math.min(...pricingOptions);
+
+  return parseFloat(mostAdvantageousPrice.toFixed(2));
 };
 
-// Exemple d'utilisation
-const exampleCalculation = calculateHertzPrice('utilitaire', 'Fiat Doblo', 3, 600);
-console.log(exampleCalculation);
-
-export default calculateHertzPrice;
+export default HertzPriceCalculation;

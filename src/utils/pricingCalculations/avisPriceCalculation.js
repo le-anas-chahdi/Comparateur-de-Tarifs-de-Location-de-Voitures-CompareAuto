@@ -1,24 +1,73 @@
-import avisPricing from '../../data/avisPricing';
+import avisPricing from "../../data/avisPricing";
 
-export const avisPriceCalculation = (carType, durationInMinutes) => {
-    const carPricing = avisPricing.noSubscription[carType];
-    if (!carPricing) {
-        return 0; // Return 0 if the car type is not available
-    }
+const MINUTES_IN_DAY = 1440;
+const MINUTES_IN_WEEK = 10080;
+const MINUTES_IN_MONTH = 43800;
+const FUEL_PRICE_PER_LITER = 1.80; // Current fuel price in Lyon (adjust as needed)
 
-    const durationInDays = Math.ceil(durationInMinutes / 1440); // Always round up to the nearest day
-    const durationInWeeks = Math.ceil(durationInMinutes / 10080); // Always round up to the nearest week
-    const durationInMonths = Math.ceil(durationInMinutes / 43800); // Always round up to the nearest month
+const avisPriceCalculation = (carType, durationInMinutes, distanceInKm) => {
+  // Get the pricing data for the specified car type
+  const carPricing = avisPricing[carType];
+  if (!carPricing) {
+    throw new Error(`Invalid car type: ${carType}`);
+  }
 
-    let totalCost = 0;
+  const { unlockFee, dailyRate, weeklyRate, monthlyRate, fuelConsumption } = carPricing;
 
-    if (durationInDays <= 7) {
-        totalCost = durationInDays * carPricing.daily; // Use daily rate for up to 7 days
-    } else if (durationInDays <= 30) {
-        totalCost = durationInWeeks * carPricing.weekly; // Use weekly rate for up to a month
-    } else {
-        totalCost = durationInMonths * carPricing.monthly; // Use monthly rate for over a month
-    }
+  // Convert duration into days, weeks, and months
+  const totalDays = Math.ceil(durationInMinutes / MINUTES_IN_DAY);
+  const totalWeeks = Math.floor(totalDays / 7);
+  const remainingDaysAfterWeeks = totalDays % 7;
+  const totalMonths = Math.floor(totalDays / 30); // Approximation of a month as 30 days
+  const remainingDaysAfterMonths = totalDays % 30;
 
-    return totalCost.toFixed(2); // Return the total cost rounded to 2 decimals
+  // Calculate fuel cost
+  const fuelCost = (distanceInKm * fuelConsumption * FUEL_PRICE_PER_LITER) / 100;
+
+  // Calculate all possible scenarios
+  const costOptions = [];
+
+  // Option 1: Entirely daily
+  costOptions.push(dailyRate * totalDays);
+
+  // Option 2: Entirely weekly
+  costOptions.push(weeklyRate * totalWeeks);
+
+  // Option 3: Entirely monthly
+  costOptions.push(monthlyRate * totalMonths);
+
+  // Option 4: Monthly + remaining daily
+  if (totalMonths > 0) {
+    costOptions.push(monthlyRate * totalMonths + dailyRate * remainingDaysAfterMonths);
+  }
+
+  // Option 5: Monthly + remaining weekly
+  if (totalMonths > 0) {
+    costOptions.push(monthlyRate * totalMonths + weeklyRate);
+  }
+
+  // Option 6: Weekly + remaining daily
+  if (totalWeeks > 0) {
+    costOptions.push(weeklyRate * totalWeeks + dailyRate * remainingDaysAfterWeeks);
+  }
+
+  // Option 7: Monthly + weekly + remaining daily
+  if (totalMonths > 0 && remainingDaysAfterMonths >= 7) {
+    const remainingWeeksAfterMonths = Math.floor(remainingDaysAfterMonths / 7);
+    const remainingDaysAfterMonthsAndWeeks = remainingDaysAfterMonths % 7;
+
+    costOptions.push(
+      monthlyRate * totalMonths +
+        weeklyRate * remainingWeeksAfterMonths +
+        dailyRate * remainingDaysAfterMonthsAndWeeks
+    );
+  }
+
+  // Add the unlock fee to all cost options
+  const finalCosts = costOptions.map((cost) => cost + unlockFee + fuelCost);
+
+  // Return the minimum cost, rounded to 2 decimals
+  return parseFloat(Math.min(...finalCosts).toFixed(2));
 };
+
+export default avisPriceCalculation;
