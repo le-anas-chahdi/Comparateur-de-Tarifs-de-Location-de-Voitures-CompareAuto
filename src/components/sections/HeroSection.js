@@ -21,9 +21,9 @@ const HeroSection = () => {
     }}>
       <div className="overlay"></div>
       <div className="hero-content">
-        <h1>Find the Best Car Rental Deals Across France</h1>
-        <p>Compare rental car prices from top companies and find the perfect vehicle for your trip.</p>
-        <Link to="/comparison" className="cta-btn">Compare Now</Link>
+        <h1>Trouvez les meilleures offres de location de voitures dans toute la France</h1>
+        <p>Comparez les prix de location de voitures des meilleures entreprises et trouvez le véhicule idéal pour votre voyage.</p>
+        <Link to="/comparison" className="cta-btn">Comparez maintenant</Link>
       </div>
     </div>
   );

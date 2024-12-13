@@ -4,19 +4,14 @@ const MINUTES_IN_HOUR = 60;
 const MINUTES_IN_DAY = 1440;
 const MINUTES_IN_WEEK = 10080;
 
-const citizpriceCalculation = (pricingData, carType, durationInMinutes, kilometers) => {
-  // Validate car type
+const citizPriceCalculation = (pricingData, carType, durationInMinutes, kilometers) => {
   const carPricing = pricingData[carType];
   if (!carPricing) {
-    throw new Error(`Invalid car type: ${carType}`);
+    console.error(`Invalid car type: ${carType}`);
+    return 0; // Return 0 for invalid car type
   }
 
   const { hourly, daily, weekly, kmRate, reducedKmRate, reducedKmThreshold } = carPricing;
-
-  // Validate input
-  if (durationInMinutes <= 0 || kilometers < 0) {
-    return 0; // No cost for zero duration or negative kilometers
-  }
 
   // Convert duration
   const durationInHours = durationInMinutes / MINUTES_IN_HOUR;
@@ -31,33 +26,27 @@ const citizpriceCalculation = (pricingData, carType, durationInMinutes, kilomete
       ? kilometers * kmRate
       : reducedKmThreshold * kmRate + (kilometers - reducedKmThreshold) * reducedKmRate;
 
-  // Precompute durations
-  const weeklyCost = weekly * totalWeeks;
-  const dailyCost = daily * totalDays;
-  const hourlyCost = hourly * durationInHours;
-
+  // Calculate various pricing scenarios
   const durationCosts = [
-    hourlyCost, // Option 1: Entirely hourly
-    dailyCost, // Option 2: Entirely daily
-    weeklyCost, // Option 3: Entirely weekly
-    weeklyCost + daily * remainingDays, // Option 4: Weekly + remaining daily
-    weeklyCost + hourly * remainingHours, // Option 5: Weekly + remaining hourly
-    weeklyCost + daily * remainingDays + hourly * remainingHours, // Option 6: Weekly + daily + remaining hourly
-    daily * totalDays + hourly * remainingHours, // Option 7: Daily + remaining hourly
-    weeklyCost + daily * remainingDays, // Option 8: Weekly + daily
+    hourly * durationInHours, // Entirely hourly
+    daily * totalDays, // Entirely daily
+    weekly * totalWeeks, // Entirely weekly
+    weekly * totalWeeks + daily * remainingDays, // Weekly + daily
+    weekly * totalWeeks + hourly * remainingHours, // Weekly + hourly
+    weekly * totalWeeks + daily * remainingDays + hourly * remainingHours, // Weekly + daily + hourly
   ];
 
   // Add kilometer cost to each option and find the minimum
   const totalCosts = durationCosts.map((cost) => cost + kmCost);
-  return parseFloat(Math.min(...totalCosts).toFixed(2)); // Return the best price
+  return parseFloat(Math.min(...totalCosts).toFixed(2));
 };
 
 // No subscription pricing
 export const noSubscriptionPricing = (carType, durationInMinutes, kilometers) => {
-  return citizpriceCalculation(citizPricing.noSubscription, carType, durationInMinutes, kilometers);
+  return citizPriceCalculation(citizPricing.noSubscription, carType, durationInMinutes, kilometers);
 };
 
 // Subscription pricing
 export const subscriptionPricing = (carType, durationInMinutes, kilometers) => {
-  return citizpriceCalculation(citizPricing.subscription, carType, durationInMinutes, kilometers);
+  return citizPriceCalculation(citizPricing.subscription, carType, durationInMinutes, kilometers);
 };

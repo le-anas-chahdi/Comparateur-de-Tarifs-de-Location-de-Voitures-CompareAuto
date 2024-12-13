@@ -3,18 +3,15 @@ import PriceVsDuration from './PriceVsDuration';
 import { useState } from 'react';
 
 const PriceContainer = () => {
-    const [carType, setCarType] = useState("verysmallCars");
+    const [carType, setCarType] = useState("catS");
     const [kilometers, setKilometers] = useState("50");
 
     const carTypes = [
-        { value: "verysmallCars", label: "Very Small Cars" },
-        { value: "smallCars", label: "Small Cars" },
-        { value: "compactCars", label: "Compact Cars" },
-        { value: "airportCars", label: "Airport Cars" },
-        { value: "utilityVehicles3m3", label: "Utility Vehicles (3m³)" },
-        { value: "utilityVehicles6m3", label: "Utility Vehicles (6m³)" },
-        { value: "teslaCars", label: "Tesla Cars" },
-        { value: "mpvCars", label: "MPV Cars" }
+        { value: "catS", label: "Citadine" },
+        { value: "catM", label: "Compacte" },
+        { value: "catL", label: "Familiale" },
+        { value: "catXL", label: "SUV" },
+        { value: "catXXL", label: "Van" }
     ];
     
     return (

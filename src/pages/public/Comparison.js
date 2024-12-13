@@ -8,7 +8,7 @@ const Comparison = () => {
   return (
     <div>
       <Navbar />
-      <h1 className="text-4xl font-extrabold text-gray-800 mb-12 text-center mt-5 xl:mt-7">Comparison Page</h1>
+      <h1 className="text-4xl font-extrabold text-gray-800 mb-12 text-center mt-5 xl:mt-7">Page de comparaison</h1>
       <div className='w-full flex flex-col gap-7'>
         <ComparisonForm />
         <PriceDistanceContainer/>

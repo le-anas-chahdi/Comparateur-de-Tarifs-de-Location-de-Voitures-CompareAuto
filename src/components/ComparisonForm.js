@@ -1,289 +1,252 @@
 import React, { useState } from 'react';
 import './ComparisonForm.css';
-import { noSubscriptionPricing, subscriptionPricing } from '../utils/pricingCalculations/citizpriceCalculation';
+import { Line } from 'react-chartjs-2';
+import { 
+  noSubscriptionPricing, 
+  subscriptionPricing 
+} from '../utils/pricingCalculations/citizpriceCalculation';
 import { leoAndGoPricingCalculation } from '../utils/pricingCalculations/leoAndGoPriceCalculation';
-import leoAndGoPricing from '../data/leoAndGoPricing'; // Import pricing data directly
-import { Line } from 'react-chartjs-2'; // Import chart component
-import { avisPriceCalculation } from '../utils/pricingCalculations/avisPriceCalculation';
+import avisPriceCalculation from '../utils/pricingCalculations/avisPriceCalculation';
 import { europcarPriceCalculation } from '../utils/pricingCalculations/europcarPriceCalculation';
+import HertzPriceCalculation from '../utils/pricingCalculations/hertzPriceCalculation';
+import sixtPriceCalculation from '../utils/pricingCalculations/sixtPriceCalculation';
+import { boltPriceCalculation } from '../utils/pricingCalculations/boltPriceCalculation';
 
-// Import necessary Chart.js components and manually register them
 import {
-    Chart as ChartJS,
-    CategoryScale,  // The "category" scale
-    LinearScale,    // Linear scale for the y-axis
-    PointElement,   // Points on the line chart
-    LineElement,    // Line element for line chart
-    Title,          // Title plugin (optional)
-    Tooltip,        // Tooltip plugin
-    Legend,         // Legend plugin
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
 } from 'chart.js';
 
-// Register Chart.js components
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend
-);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-// List of car types not offered by Citiz and Leo&Go
-const unavailableCitizCarTypes = ['utilityVehicles3m3', 'teslaCars', 'airportCars'];
-const unavailableLeoAndGoCarTypes = ['smallCars', 'mpvCars'];
+const convertDurationToMinutes = (duration, scale) => {
+  const scales = { minutes: 1, hours: 60, days: 1440, weeks: 10080, months: 43800 };
+  return parseFloat(duration) * (scales[scale] || 1);
+};
 
 const ComparisonForm = () => {
-    const [duration, setDuration] = useState('');
-    const [durationScale, setDurationScale] = useState('days'); // Default scale
-    const [carType, setCarType] = useState('verysmallCars');
-    const [kilometers, setKilometers] = useState('');
-    const [isSubscribed, setIsSubscribed] = useState(false); // State for Citiz subscription
-    const [showSubscriberPrices, setShowSubscriberPrices] = useState(false); // State for showing subscriber prices if not subscribed
-    const [priceData, setPriceData] = useState(null); // To hold the price data for the chart
-    const [citizErrorMessage, setCitizErrorMessage] = useState(''); // To hold any Citiz-related error messages
-    const [leoAndGoErrorMessage, setLeoAndGoErrorMessage] = useState(''); // To hold any Leo&Go-related error messages
-    const [maxDurationMessage, setMaxDurationMessage] = useState(''); // To display a message for max duration for Leo&Go
+  const [duration, setDuration] = useState('');
+  const [durationScale, setDurationScale] = useState('days');
+  const [carType, setCarType] = useState('catS');
+  const [kilometers, setKilometers] = useState('');
+  const [priceData, setPriceData] = useState(null);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const durationInMinutes = convertDurationToMinutes(duration, durationScale);
-        const kilometersValue = parseFloat(kilometers);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const durationInMinutes = convertDurationToMinutes(duration, durationScale);
+    const kilometersValue = parseFloat(kilometers) || 0;
 
-        let priceComparisonData = {
-            labels: [],
-            datasets: [
-                {
-                    label: 'Car Rental Price Comparison (€)',
-                    data: [],
-                    borderColor: [],
-                    borderWidth: 2,
-                },
-            ],
-        };
+    const labels = [];
+    const data = [];
+    const borderColor = [];
 
-        // Check if the selected car type is unavailable for Leo&Go
-        if (unavailableLeoAndGoCarTypes.includes(carType)) {
-            setLeoAndGoErrorMessage('Leo&Go does not offer this type of vehicle.');
-            setMaxDurationMessage(''); // Clear the max duration message if car type is unavailable
-        } else {
-            setLeoAndGoErrorMessage(''); // Clear previous Leo&Go error messages
+    try {
+      // Leo&Go
+      const leoAndGoPrice = leoAndGoPricingCalculation(carType, durationInMinutes, kilometersValue);
+      labels.push('Leo&Go');
+      data.push(leoAndGoPrice?.totalCost || leoAndGoPrice || 0);
+      borderColor.push('#FF6B00');
+    } catch (error) {
+      console.error('Leo&Go Error:', error);
+      labels.push('Leo&Go');
+      data.push(0);
+      borderColor.push('#FF6B00');
+    }
 
-            // Get Leo&Go pricing data for the selected car type
-            const carPricing = leoAndGoPricing[carType];
-            const maxDuration = carPricing.durations[carPricing.durations.length - 1].duration; // Max duration
-            const maxPrice = leoAndGoPricingCalculation(carType, maxDuration, kilometersValue).totalCost;
+    try {
+      // Citiz (No Subscription)
+      const citizNoSubPrice = noSubscriptionPricing(carType, durationInMinutes, kilometersValue);
+      labels.push('Citiz (No Subscription)');
+      data.push(citizNoSubPrice || 0);
+      borderColor.push('#007bff');
+    } catch (error) {
+      console.error('Citiz No Subscription Error:', error);
+      labels.push('Citiz (No Subscription)');
+      data.push(0);
+      borderColor.push('#007bff');
+    }
 
-            // Convert max duration to the most appropriate scale for display
-            const maxDurationFormatted = formatDuration(maxDuration);
+    try {
+      // Citiz (Subscription)
+      const citizSubPrice = subscriptionPricing(carType, durationInMinutes, kilometersValue);
+      labels.push('Citiz (Subscription)');
+      data.push(citizSubPrice || 0);
+      borderColor.push('#28a745');
+    } catch (error) {
+      console.error('Citiz Subscription Error:', error);
+      labels.push('Citiz (Subscription)');
+      data.push(0);
+      borderColor.push('#28a745');
+    }
 
-            // If duration exceeds the maximum available duration
-            if (durationInMinutes > maxDuration) {
-                setMaxDurationMessage(
-                    `For durations above ${maxDurationFormatted}, please refer to Leo&Go directly. 
-                    The price for ${maxDurationFormatted} with ${kilometers} kilometers is €${maxPrice}.`
-                );
-                // Set the price for the max duration
-                priceComparisonData.labels.push('Leo&Go');
-                priceComparisonData.datasets[0].data.push(maxPrice);
-                priceComparisonData.datasets[0].borderColor.push('#ffcc00');
-            } else {
-                setMaxDurationMessage(''); // Clear the max duration message
-                let leoAndGoPrice = leoAndGoPricingCalculation(carType, durationInMinutes, kilometersValue).totalCost;
-                priceComparisonData.labels.push('Leo&Go');
-                priceComparisonData.datasets[0].data.push(leoAndGoPrice);
-                priceComparisonData.datasets[0].borderColor.push('#ffcc00');
-            }
-        }
+    try {
+      // Avis
+      const avisPrice = avisPriceCalculation(carType, durationInMinutes, kilometersValue);
+      labels.push('Avis');
+      data.push(avisPrice || 0);
+      borderColor.push('#FF69B4');
+    } catch (error) {
+      console.error('Avis Error:', error);
+      labels.push('Avis');
+      data.push(0);
+      borderColor.push('#FF69B4');
+    }
 
-        // Check if the selected car type is unavailable for Citiz
-        if (unavailableCitizCarTypes.includes(carType)) {
-            setCitizErrorMessage('Citiz does not offer this type of vehicle.');
-        } else {
-            setCitizErrorMessage(''); // Clear any previous Citiz error messages
+    try {
+      // Europcar
+      const europcarPrice = europcarPriceCalculation(carType, durationInMinutes, kilometersValue);
+      labels.push('Europcar');
+      data.push(europcarPrice || 0);
+      borderColor.push('#ff5733');
+    } catch (error) {
+      console.error('Europcar Error:', error);
+      labels.push('Europcar');
+      data.push(0);
+      borderColor.push('#ff5733');
+    }
 
-            // If the user is a Citiz subscriber, show both subscriber and non-subscriber prices
-            if (isSubscribed) {
-                const citizNoSubPrice = noSubscriptionPricing(carType, durationInMinutes, kilometersValue);
-                const citizSubPrice = subscriptionPricing(carType, durationInMinutes, kilometersValue);
+    try {
+      // Hertz
+      const hertzPrice = HertzPriceCalculation(carType, durationInMinutes, kilometersValue);
+      labels.push('Hertz');
+      data.push(hertzPrice || 0);
+      borderColor.push('#007FFF');
+    } catch (error) {
+      console.error('Hertz Error:', error);
+      labels.push('Hertz');
+      data.push(0);
+      borderColor.push('#007FFF');
+    }
 
-                // Add Citiz prices to the comparison chart
-                priceComparisonData.labels.push('Citiz (No Subscription)', 'Citiz (Subscription)');
-                priceComparisonData.datasets[0].data.push(citizNoSubPrice, citizSubPrice);
-                priceComparisonData.datasets[0].borderColor.push('#007bff', '#28a745');
-            } else if (showSubscriberPrices) {
-                // If the user is not subscribed but opts to see subscriber prices
-                const citizNoSubPrice = noSubscriptionPricing(carType, durationInMinutes, kilometersValue);
-                const citizSubPrice = subscriptionPricing(carType, durationInMinutes, kilometersValue);
+    try {
+      // Sixt
+      const sixtPrice = sixtPriceCalculation(carType, durationInMinutes, kilometersValue);
+      labels.push('Sixt');
+      data.push(sixtPrice || 0);
+      borderColor.push('#800080');
+    } catch (error) {
+      console.error('Sixt Error:', error);
+      labels.push('Sixt');
+      data.push(0);
+      borderColor.push('#800080');
+    }
 
-                // Add both prices to the chart
-                priceComparisonData.labels.push('Citiz (No Subscription)', 'Citiz (Subscription)');
-                priceComparisonData.datasets[0].data.push(citizNoSubPrice, citizSubPrice);
-                priceComparisonData.datasets[0].borderColor.push('#007bff', '#28a745');
-            } else {
-                // If the user is not subscribed and opts to see only non-subscriber prices
-                const citizNoSubPrice = noSubscriptionPricing(carType, durationInMinutes, kilometersValue);
+    try {
+      // Bolt
+      const boltPrice = boltPriceCalculation(carType, durationInMinutes, kilometersValue);
+      labels.push('Bolt');
+      data.push(boltPrice || 0);
+      borderColor.push('#32CD32');
+    } catch (error) {
+      console.error('Bolt Error:', error);
+      labels.push('Bolt');
+      data.push(0);
+      borderColor.push('#32CD32');
+    }
 
-                // Add only the non-subscriber price to the chart
-                priceComparisonData.labels.push('Citiz (No Subscription)');
-                priceComparisonData.datasets[0].data.push(citizNoSubPrice);
-                priceComparisonData.datasets[0].borderColor.push('#007bff');
-            }
-        }
+    setPriceData({
+      labels,
+      datasets: [
+        {
+          label: 'Car Rental Price Comparison (€)',
+          data,
+          borderColor,
+          backgroundColor: borderColor,
+          borderWidth: 2,
+        },
+      ],
+    });
+  };
 
-        const avisPrice = avisPriceCalculation(carType, durationInMinutes);
-        if (avisPrice > 0) {
-            priceComparisonData.labels.push('Avis');
-            priceComparisonData.datasets[0].data.push(avisPrice);
-            priceComparisonData.datasets[0].borderColor.push('#ffa500'); // Use a unique color for Avis
-        }
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: {
+        callbacks: {
+          label: (context) => `${context.dataset.label}: ${context.parsed.y.toFixed(2)}€`,
+        },
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: { display: true, text: 'Price (€)' },
+      },
+      x: {
+        title: { display: true, text: 'Company' },
+      },
+    },
+  };
 
-        const europcarPrice = europcarPriceCalculation(
-            carType, 
-            durationInMinutes, 
-            kilometersValue, 
-        );
-        
-        if (europcarPrice.totalCost > 0){
-            priceComparisonData.labels.push('Europcar');
-            priceComparisonData.datasets[0].data.push(europcarPrice.totalCost);
-            priceComparisonData.datasets[0].borderColor.push('#ff5733');
-        }
-
-        setPriceData(priceComparisonData); // Set data for chart
-    };
-
-    // Helper function to convert the duration based on the scale
-    const convertDurationToMinutes = (duration, scale) => {
-        switch (scale) {
-            case 'minutes':
-                return parseFloat(duration);
-            case 'hours':
-                return parseFloat(duration) * 60;
-            case 'days':
-                return parseFloat(duration) * 1440;
-            case 'weeks':
-                return parseFloat(duration) * 10080;
-            case 'months':
-                return parseFloat(duration) * 43800; // Approximation: 1 month = 30.42 days
-            default:
-                return parseFloat(duration);
-        }
-    };
-
-    // Helper function to format the duration into a human-readable format
-    const formatDuration = (durationInMinutes) => {
-        if (durationInMinutes >= 43800) { // Convert to months
-            const months = (durationInMinutes / 43800).toFixed(2);
-            return `${months} months`;
-        } else if (durationInMinutes >= 10080) { // Convert to weeks
-            const weeks = (durationInMinutes / 10080).toFixed(2);
-            return `${weeks} weeks`;
-        } else if (durationInMinutes >= 1440) { // Convert to days
-            const days = (durationInMinutes / 1440).toFixed(2);
-            return `${days} days`;
-        } else if (durationInMinutes >= 60) { // Convert to hours
-            const hours = (durationInMinutes / 60).toFixed(2);
-            return `${hours} hours`;
-        } else {
-            return `${durationInMinutes} minutes`; // Keep in minutes
-        }
-    };
-
-    // Define chart options to properly scale the y-axis
-    const chartOptions = {
-        scales: {
-            y: {
-                beginAtZero: true, // Start y-axis at 0
-                suggestedMax: 500, // Set a suggested maximum value for the y-axis
-            }
-        }
-    };
-
-    return (
-        <div className="comparison-form-container sm:w-[70%]  lg:w-[50%] xl:w-[40%] min-h-[700px]  px-20 py-20">
-            <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
-                <div className="form-group gap-2">
-                    <label>Duration:</label>
-                    <input
-                        type="number"
-                        value={duration}
-                        onChange={(e) => setDuration(e.target.value)}
-                        required
-                        className="form-control"
-                    />
-                    <select
-                        value={durationScale}
-                        onChange={(e) => setDurationScale(e.target.value)}
-                        className="form-control mt-3"
-                    >
-                        <option value="minutes">Minutes</option>
-                        <option value="hours">Hours</option>
-                        <option value="days">Days</option>
-                        <option value="weeks">Weeks</option>
-                        <option value="months">Months</option>
-                    </select>
-                </div>
-    
-                <div className="form-group">
-                    <label>Car Type:</label>
-                    <select
-                        value={carType}
-                        onChange={(e) => setCarType(e.target.value)}
-                        required
-                        className="form-control"
-                    >
-                        <option value="verysmallcars">Very Small Cars</option>
-                        <option value="smallCars">Small Cars</option>
-                        <option value="compactCars">Compact Cars</option>
-                        <option value="airportCars">Airport Cars</option>
-                        <option value="utilityVehicles3m3">Utility Vehicles (3m³)</option>
-                        <option value="utilityVehicles6m3">Utility Vehicles (6m³)</option>
-                        <option value="teslaCars">Tesla Cars</option>
-                        <option value="mpvCars">MPV Cars</option>
-                    </select>
-                </div>
-    
-                <div className="form-group">
-                    <label>Kilometers:</label>
-                    <input
-                        type="number"
-                        value={kilometers}
-                        onChange={(e) => setKilometers(e.target.value)}
-                        required
-                        className="form-control"
-                    />
-                </div>
-                <button type="submit" className="btn-submit">Submit</button>
-            </form>
-    
-            {leoAndGoErrorMessage && (
-                <div className="error-message">
-                    <p>{leoAndGoErrorMessage}</p>
-                </div>
-            )}
-    
-            {citizErrorMessage && (
-                <div className="error-message">
-                    <p>{citizErrorMessage}</p>
-                </div>
-            )}
-    
-            {maxDurationMessage && (
-                <div className="max-duration-message">
-                    <p>{maxDurationMessage}</p>
-                </div>
-            )}
-    
-            {priceData && (
-                <div>
-                    <Line data={priceData} options={chartOptions} />
-                </div>
-            )}
+  return (
+    <div className="comparison-form-container sm:w-[70%] lg:w-[50%] xl:w-[40%] min-h-[700px] px-20 py-20">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <div className="form-group">
+          <label>Durée:</label>
+          <input
+            type="number"
+            value={duration}
+            onChange={(e) => setDuration(e.target.value)}
+            required
+            className="form-control"
+          />
+          <select
+            value={durationScale}
+            onChange={(e) => setDurationScale(e.target.value)}
+            className="form-control mt-3"
+          >
+            <option value="minutes">Minutes</option>
+            <option value="hours">Hours</option>
+            <option value="days">Days</option>
+            <option value="weeks">Weeks</option>
+            <option value="months">Months</option>
+          </select>
         </div>
-    );
-    
+
+        <div className="form-group">
+          <label>Car Type:</label>
+          <select
+            value={carType}
+            onChange={(e) => setCarType(e.target.value)}
+            required
+            className="form-control"
+          >
+            <option value="catS">Citadine</option>
+            <option value="catM">Compacte</option>
+            <option value="catL">Familiale</option>
+            <option value="catXL">SUV</option>
+            <option value="catXXL">Van</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label>Kilometers:</label>
+          <input
+            type="number"
+            value={kilometers}
+            onChange={(e) => setKilometers(e.target.value)}
+            required
+            className="form-control"
+          />
+        </div>
+
+        <button type="submit" className="btn-submit">Submit</button>
+      </form>
+
+      {priceData && (
+        <div>
+          <Line data={priceData} options={chartOptions} />
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default ComparisonForm;

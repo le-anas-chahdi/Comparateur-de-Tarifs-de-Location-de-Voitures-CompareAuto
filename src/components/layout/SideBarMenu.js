@@ -30,21 +30,21 @@ export default function  SidebarMenu (){
             to="/personalinfo"
             onClick={toggleMenu}
           >
-            Info Personnelle
+            Informations Personnelles
           </Link>
           <Link
             className="hover:text-green-900 font-semibold"
             to="/changePassword"
             onClick={toggleMenu}
           >
-           Changer Mot de Passe
+           Modifier le mot de passe
           </Link>
           <Link
             className="hover:text-green-900 font-semibold"
             to="/subscriptions"
             onClick={toggleMenu}
           >
-          Mes Abonnements
+          Mes abonnements
           </Link>
           <Link
             className="hover:text-green-900 font-semibold"

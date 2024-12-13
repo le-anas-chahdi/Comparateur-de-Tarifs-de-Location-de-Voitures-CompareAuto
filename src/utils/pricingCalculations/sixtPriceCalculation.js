@@ -6,16 +6,12 @@ const MINUTES_IN_MONTH = 43800; // Approximation: 30.42 days per month
 const FUEL_PRICE_PER_LITER = 1.85; // Static fuel price in €/liter
 
 const sixtPriceCalculation = (carType, durationInMinutes, kilometers) => {
-  // Debug logging to verify inputs
-  console.log('Car Type:', carType);
-  console.log('Duration (Minutes):', durationInMinutes);
-  console.log('Kilometers:', kilometers);
-
   // Validate carType
   const carPricing = sixtPricing[carType];
+
   if (!carPricing) {
-    console.error(`Invalid car type: ${carType}. Please check the pricing data.`);
-    return null; // Return null to avoid breaking the app
+    console.error(`Invalid car type: ${carType}`);
+    return 0; // Return 0 for invalid car type
   }
 
   const {
@@ -27,6 +23,7 @@ const sixtPriceCalculation = (carType, durationInMinutes, kilometers) => {
     fuelConsumption,
   } = carPricing;
 
+  // Calculate duration in various units
   const durationInDays = durationInMinutes / MINUTES_IN_DAY;
   const durationInWeeks = durationInMinutes / MINUTES_IN_WEEK;
   const durationInMonths = durationInMinutes / MINUTES_IN_MONTH;
@@ -42,28 +39,27 @@ const sixtPriceCalculation = (carType, durationInMinutes, kilometers) => {
   const pricingOptions = [];
 
   // 1. Entirely daily rate
-  const dailyCost = dailyRate * Math.ceil(durationInDays) + totalFuelCost + extraKmCost;
-  pricingOptions.push(dailyCost);
+  pricingOptions.push(dailyRate * Math.ceil(durationInDays) + totalFuelCost + extraKmCost);
 
   // 2. Entirely weekly rate
-  const weeklyCost = weeklyRate * Math.ceil(durationInWeeks) + totalFuelCost + extraKmCost;
-  pricingOptions.push(weeklyCost);
+  pricingOptions.push(weeklyRate * Math.ceil(durationInWeeks) + totalFuelCost + extraKmCost);
 
   // 3. Entirely monthly rate
-  const monthlyCost = monthlyRate * Math.ceil(durationInMonths) + totalFuelCost + extraKmCost;
-  pricingOptions.push(monthlyCost);
+  pricingOptions.push(monthlyRate * Math.ceil(durationInMonths) + totalFuelCost + extraKmCost);
 
   // 4. Combination of weeks + remaining days
   const fullWeeks = Math.floor(durationInDays / 7);
   const remainingDays = durationInDays % 7;
-  const mixedWeeksCost = fullWeeks * weeklyRate + Math.ceil(remainingDays) * dailyRate + totalFuelCost + extraKmCost;
-  pricingOptions.push(mixedWeeksCost);
+  pricingOptions.push(
+    fullWeeks * weeklyRate + Math.ceil(remainingDays) * dailyRate + totalFuelCost + extraKmCost
+  );
 
   // 5. Combination of months + remaining weeks
   const fullMonths = Math.floor(durationInDays / 30.42);
   const remainingWeeks = (durationInDays % 30.42) / 7;
-  const mixedMonthsCost = fullMonths * monthlyRate + Math.ceil(remainingWeeks) * weeklyRate + totalFuelCost + extraKmCost;
-  pricingOptions.push(mixedMonthsCost);
+  pricingOptions.push(
+    fullMonths * monthlyRate + Math.ceil(remainingWeeks) * weeklyRate + totalFuelCost + extraKmCost
+  );
 
   // Find the most advantageous option
   const mostAdvantageousPrice = Math.min(...pricingOptions);

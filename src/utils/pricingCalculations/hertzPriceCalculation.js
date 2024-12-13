@@ -1,9 +1,8 @@
-import hertzPricing from '../../data/hertzPricing'; // Assuming pricing data is in a file
+import hertzPricing from '../../data/hertzPricing';
 
-// Constants
 const MINUTES_IN_DAY = 1440;
 const MINUTES_IN_WEEK = 10080;
-const MINUTES_IN_MONTH = 43800; // Approximate: 30.42 days in a month
+const MINUTES_IN_MONTH = 43800; // Approximation: 30.42 days in a month
 const FUEL_PRICE_PER_LITER = 1.85; // Static fuel price in €/liter
 
 /**
@@ -15,51 +14,70 @@ const FUEL_PRICE_PER_LITER = 1.85; // Static fuel price in €/liter
  * @returns {number} The most advantageous price, rounded to 2 decimals.
  */
 const HertzPriceCalculation = (carType, durationInMinutes, kilometers) => {
+  // Retrieve the pricing data for the specified car type
   const carPricing = hertzPricing[carType];
 
   if (!carPricing) {
-    throw new Error(`Invalid car type: ${carType}`);
+    console.error(`Invalid car type: ${carType}`);
+    return 0; // Return 0 for invalid car type
   }
 
   const { dailyRate, weeklyRate, monthlyRate, fuelConsumption } = carPricing;
 
-  const durationInDays = durationInMinutes / MINUTES_IN_DAY;
-  const durationInWeeks = durationInMinutes / MINUTES_IN_WEEK;
-  const durationInMonths = durationInMinutes / MINUTES_IN_MONTH;
+  // Calculate durations
+  const totalDays = Math.ceil(durationInMinutes / MINUTES_IN_DAY);
+  const totalWeeks = Math.floor(totalDays / 7);
+  const remainingDaysAfterWeeks = totalDays % 7;
+  const totalMonths = Math.floor(totalDays / 30.42);
+  const remainingDaysAfterMonths = totalDays % Math.ceil(30.42);
 
   // Calculate total fuel cost
-  const totalFuelCost = (kilometers / 100) * fuelConsumption * FUEL_PRICE_PER_LITER;
+  const fuelCost = (kilometers / 100) * fuelConsumption * FUEL_PRICE_PER_LITER;
 
-  // Possible pricing scenarios
-  const pricingOptions = [];
+  // Define pricing scenarios
+  const costOptions = [];
 
-  // 1. Entirely daily rate
-  pricingOptions.push(dailyRate * Math.ceil(durationInDays) + totalFuelCost);
+  // Scenario 1: Entirely daily rates
+  costOptions.push(dailyRate * totalDays + fuelCost);
 
-  // 2. Entirely weekly rate
-  pricingOptions.push(weeklyRate * Math.ceil(durationInWeeks) + totalFuelCost);
+  // Scenario 2: Entirely weekly rates
+  if (totalWeeks > 0) {
+    costOptions.push(weeklyRate * totalWeeks + dailyRate * remainingDaysAfterWeeks + fuelCost);
+  }
 
-  // 3. Entirely monthly rate
-  pricingOptions.push(monthlyRate * Math.ceil(durationInMonths) + totalFuelCost);
+  // Scenario 3: Entirely monthly rates
+  if (totalMonths > 0) {
+    costOptions.push(monthlyRate * totalMonths + dailyRate * remainingDaysAfterMonths + fuelCost);
+  }
 
-  // 4. Combination of weeks + remaining days
-  const fullWeeks = Math.floor(durationInDays / 7);
-  const remainingDays = durationInDays % 7;
-  pricingOptions.push(
-    fullWeeks * weeklyRate + Math.ceil(remainingDays) * dailyRate + totalFuelCost
-  );
+  // Scenario 4: Monthly + Weekly + Remaining Days
+  if (totalMonths > 0) {
+    const remainingDays = totalDays - totalMonths * 30.42;
+    const remainingWeeks = Math.floor(remainingDays / 7);
+    const remainingExtraDays = remainingDays % 7;
+    costOptions.push(
+      monthlyRate * totalMonths +
+        weeklyRate * remainingWeeks +
+        dailyRate * remainingExtraDays +
+        fuelCost
+    );
+  }
 
-  // 5. Combination of months + remaining weeks
-  const fullMonths = Math.floor(durationInDays / 30.42); // Average days in a month
-  const remainingWeeks = (durationInDays % 30.42) / 7;
-  pricingOptions.push(
-    fullMonths * monthlyRate + Math.ceil(remainingWeeks) * weeklyRate + totalFuelCost
-  );
+  // Scenario 5: Weekly + Remaining Days (No Full Months)
+  if (totalWeeks > 0) {
+    costOptions.push(weeklyRate * totalWeeks + dailyRate * remainingDaysAfterWeeks + fuelCost);
+  }
 
-  // Find the most advantageous option
-  const mostAdvantageousPrice = Math.min(...pricingOptions);
+  // Add a fallback scenario for very short durations
+  if (totalDays < 1) {
+    const hours = Math.ceil(durationInMinutes / 60);
+    const hourlyRate = dailyRate / 24; // Approximation
+    costOptions.push(hourlyRate * hours + fuelCost);
+  }
 
-  return parseFloat(mostAdvantageousPrice.toFixed(2));
+  // Return the minimum cost
+  const bestPrice = Math.min(...costOptions);
+  return parseFloat(bestPrice.toFixed(2));
 };
 
 export default HertzPriceCalculation;

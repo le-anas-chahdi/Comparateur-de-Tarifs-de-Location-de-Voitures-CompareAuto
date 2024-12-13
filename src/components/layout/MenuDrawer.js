@@ -38,14 +38,14 @@ export default function MenuDawer() {
           className={`flex flex-col gap-6 items-center font-medium text-slate-800 font-lato text-base pt-[15%]`}
         >
           <Link className="hover:text-[#ffcc00]" to="/" onClick={onClose}>
-            Home
+            Accueil
           </Link>
           <Link
             className="hover:text-[#ffcc00]"
             to="/comparison"
             onClick={onClose}
           >
-            Comparison
+            Comparateur
           </Link>
           <Link
             className="hover:text-[#ffcc00]"
@@ -59,7 +59,7 @@ export default function MenuDawer() {
             to="/aboutuspage"
             onClick={onClose}
           >
-            About Us
+            A propos
           </Link>
           <Link
             className="hover:text-[#ffcc00]"
@@ -72,7 +72,7 @@ export default function MenuDawer() {
           className="hover:bg-[#ff9900]/80 bg-[#ffcc00] p-3 rounded-xl hover:text-slate-800 text-slate-700 transition-colors duration-300"
           onClick={onClose}
           >
-              Login / Sign Up
+              Connexion | Inscription
           </Link>
 
         </div>

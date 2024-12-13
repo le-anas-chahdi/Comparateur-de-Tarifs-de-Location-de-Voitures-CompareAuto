@@ -1,9 +1,12 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 import { leoAndGoPricingCalculation } from '../../../utils/pricingCalculations/leoAndGoPriceCalculation';
-import { noSubscriptionPricing } from '../../../utils/pricingCalculations/citizpriceCalculation';
-import { avisPriceCalculation } from '../../../utils/pricingCalculations/avisPriceCalculation';
+import { noSubscriptionPricing, subscriptionPricing } from '../../../utils/pricingCalculations/citizpriceCalculation';
+import avisPriceCalculation from '../../../utils/pricingCalculations/avisPriceCalculation';
 import { europcarPriceCalculation } from '../../../utils/pricingCalculations/europcarPriceCalculation';
+import HertzPriceCalculation from '../../../utils/pricingCalculations/hertzPriceCalculation';
+import sixtPriceCalculation from '../../../utils/pricingCalculations/sixtPriceCalculation';
+import { boltPriceCalculation } from '../../../utils/pricingCalculations/boltPriceCalculation';
 
 import {
     Chart as ChartJS,
@@ -28,67 +31,73 @@ ChartJS.register(
 
 const PriceVsDuration = ({ carType, kilometers }) => {
     const generatePriceData = () => {
-        const durations = Array.from({ length: 60 }, (_, i) => i + 1);
-        const datasets = [];
-        const fixedDistance = parseFloat(kilometers);
+        const durations = Array.from({ length: 60 }, (_, i) => i + 1); // Days from 1 to 60
+        const fixedDistance = parseFloat(kilometers) || 0;
 
-        const leoAndGoData = {
-            label: 'Leo&Go',
-            data: durations.map(days => {
+        const companies = [
+            {
+                label: 'Leo&Go',
+                calculate: leoAndGoPricingCalculation,
+                color: '#FF6B00',
+            },
+            {
+                label: 'Europcar',
+                calculate: europcarPriceCalculation,
+                color: '#FF5733',
+            },
+            {
+                label: 'Citiz (No Subscription)',
+                calculate: noSubscriptionPricing,
+                color: '#FFB900',
+            },
+            {
+                label: 'Citiz (Subscription)',
+                calculate: subscriptionPricing,
+                color: '#28A745',
+            },
+            {
+                label: 'Avis',
+                calculate: avisPriceCalculation,
+                color: '#FF69B4',
+            },
+            {
+                label: 'Hertz',
+                calculate: HertzPriceCalculation,
+                color: '#007FFF',
+            },
+            {
+                label: 'Sixt',
+                calculate: sixtPriceCalculation,
+                color: '#800080',
+            },
+            {
+                label: 'Bolt',
+                calculate: boltPriceCalculation,
+                color: '#32CD32',
+            },
+        ];
+
+        const datasets = companies.map(({ label, calculate, color }) => ({
+            label,
+            data: durations.map((days) => {
                 const durationInMinutes = days * 24 * 60;
-                const price = leoAndGoPricingCalculation(carType, durationInMinutes, fixedDistance);
-                return price.totalCost ? parseFloat(price.totalCost) : null;
+                try {
+                    const result = calculate(carType, durationInMinutes, fixedDistance);
+                    return result?.totalCost || result || 0; // Ensure valid data
+                } catch (error) {
+                    console.error(`Error calculating price for ${label}:`, error);
+                    return 0; // Default to 0 on error
+                }
             }),
-            borderColor: '#FF6B00',
+            borderColor: color,
             tension: 0.4,
             borderWidth: 2,
-            fill: false
-        };
-        datasets.push(leoAndGoData);
-
-        const europcarData = {
-            label: 'Europcar',
-            data: durations.map(days => {
-                const durationInMinutes = days * 24 * 60;
-                const price = europcarPriceCalculation(carType, durationInMinutes, fixedDistance);
-                return price.totalCost ? parseFloat(price.totalCost) : null;
-            }),
-            borderColor: '#ff5733',
-            tension: 0.4,
-            borderWidth: 2,
-            fill: false
-        };
-        datasets.push(europcarData);
-
-        const citizData = {
-            label: 'Citiz',
-            data: durations.map(days => {
-                const durationInMinutes = days * 24 * 60;
-                return parseFloat(noSubscriptionPricing(carType, durationInMinutes, fixedDistance));
-            }),
-            borderColor: '#FFB900',
-            tension: 0.4,
-            borderWidth: 2,
-            fill: false
-        };
-        datasets.push(citizData);
-
-        const avisData = {
-            label: 'Avis',
-            data: durations.map(days => {
-                const durationInMinutes = days * 24 * 60;
-                return parseFloat(avisPriceCalculation(carType, durationInMinutes));
-            }),
-            borderColor: '#FF69B4',
-            tension: 0.4,
-            borderWidth: 2,
-            fill: false
-        };
-        datasets.push(avisData);
+            fill: false,
+        }));
 
         return {
-            labels: durations,
-            datasets: datasets
+            labels: durations, // X-axis labels (durations in days)
+            datasets,
         };
     };
 
@@ -100,41 +109,26 @@ const PriceVsDuration = ({ carType, kilometers }) => {
             },
             tooltip: {
                 callbacks: {
-                    label: function(context) {
-                        return `${context.dataset.label}: ${context.parsed.y.toFixed(2)}€`;
-                    }
-                }
-            }
+                    label: (context) =>
+                        `${context.dataset.label}: ${context.parsed.y.toFixed(2)}€`,
+                },
+            },
         },
         scales: {
             y: {
                 beginAtZero: true,
                 title: {
                     display: true,
-                    text: 'Price (€)'
+                    text: 'Price (€)',
                 },
-                grid: {
-                    display: true,
-                    drawBorder: true,
-                }
             },
             x: {
                 title: {
                     display: true,
-                    text: 'Duration (days)'
+                    text: 'Duration (days)',
                 },
-                ticks: {
-                    callback: function(value, index) {
-                        const days = this.getLabelForValue(value);
-                        return `${days} days`;
-                    }
-                },
-                grid: {
-                    display: true,
-                    drawBorder: true,
-                }
-            }
-        }
+            },
+        },
     };
 
     return (

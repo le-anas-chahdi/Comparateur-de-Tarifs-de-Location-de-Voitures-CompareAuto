@@ -1,10 +1,12 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 import { leoAndGoPricingCalculation } from '../../../utils/pricingCalculations/leoAndGoPriceCalculation';
-import { noSubscriptionPricing } from '../../../utils/pricingCalculations/citizpriceCalculation';
-import { avisPriceCalculation } from '../../../utils/pricingCalculations/avisPriceCalculation';
+import { noSubscriptionPricing, subscriptionPricing } from '../../../utils/pricingCalculations/citizpriceCalculation';
+import avisPriceCalculation from '../../../utils/pricingCalculations/avisPriceCalculation';
 import { europcarPriceCalculation } from '../../../utils/pricingCalculations/europcarPriceCalculation';
-
+import HertzPriceCalculation from '../../../utils/pricingCalculations/hertzPriceCalculation';
+import sixtPriceCalculation from '../../../utils/pricingCalculations/sixtPriceCalculation';
+import { boltPriceCalculation } from '../../../utils/pricingCalculations/boltPriceCalculation';
 
 import {
     Chart as ChartJS,
@@ -81,8 +83,8 @@ const PriceVsDistance = ({ time, typeoftime, carType }) => {
         datasets.push(europcarData);
 
     
-        const citizData = {
-            label: 'Citiz',
+        const citizNoSubData = {
+            label: 'Citiz No Subscription',
             data: distances.map(km => 
                 parseFloat(noSubscriptionPricing(carType, timeInMinutes, km))
             ),
@@ -91,13 +93,26 @@ const PriceVsDistance = ({ time, typeoftime, carType }) => {
             borderWidth: 2,
             fill: false
         };
-        datasets.push(citizData);
+        datasets.push(citizNoSubData);
+
+
+        const citizSubData = {
+            label: 'Citiz Subscribed',
+            data: distances.map(km => 
+                parseFloat(subscriptionPricing(carType, timeInMinutes, km))
+            ),
+            borderColor: '#FFB900',
+            tension: 0.4,
+            borderWidth: 2,
+            fill: false
+        };
+        datasets.push(citizSubData);
 
     
         const avisData = {
             label: 'Avis',
             data: distances.map(km => 
-                parseFloat(avisPriceCalculation(carType, timeInMinutes))
+                parseFloat(avisPriceCalculation(carType, timeInMinutes, km))
             ),
             borderColor: '#FF69B4',
             tension: 0.4,
@@ -105,6 +120,44 @@ const PriceVsDistance = ({ time, typeoftime, carType }) => {
             fill: false
         };
         datasets.push(avisData);
+
+        const hertzData = {
+            label: 'Hertz',
+            data: distances.map(km => 
+                parseFloat(HertzPriceCalculation(carType, timeInMinutes, km))
+            ),
+            borderColor: '#FF69B4',
+            tension: 0.4,
+            borderWidth: 2,
+            fill: false
+        };
+        datasets.push(hertzData);
+
+
+        const sixtData = {
+            label: 'Sixt',
+            data: distances.map(km => 
+                parseFloat(sixtPriceCalculation(carType, timeInMinutes, km))
+            ),
+            borderColor: '#FF69B4',
+            tension: 0.4,
+            borderWidth: 2,
+            fill: false
+        };
+        datasets.push(sixtData);
+
+
+        const boltData = {
+            label: 'Bolt',
+            data: distances.map(km => 
+                parseFloat(boltPriceCalculation(carType, timeInMinutes, km))
+            ),
+            borderColor: '#FF69B4',
+            tension: 0.4,
+            borderWidth: 2,
+            fill: false
+        };
+        datasets.push(boltData);
 
         return {
             labels: distances,

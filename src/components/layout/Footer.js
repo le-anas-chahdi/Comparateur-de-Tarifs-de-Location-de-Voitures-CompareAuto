@@ -8,10 +8,10 @@ const Footer = () => {
   return (
     <footer className="bg-black space-y-4 p-4">
       <div className="flex gap-5 text-white justify-center lg:text-base sm:text-sm text-xs">
-        <Link to="/comparison">Comparison</Link>
-        <Link to="/aboutuspage">About Us</Link>
+        <Link to="/comparison">Comparateur</Link>
+        <Link to="/aboutuspage">A propos</Link>
         <Link to="/faqpage">FAQ</Link>
-        <Link to="/privacypolicypage">Privacy policy</Link>
+        <Link to="/privacypolicypage">Politique de confidentialité</Link>
         <Link to="/jobs">Recrutement</Link>
         <Link to="/legal">Mentions légales</Link>
         
