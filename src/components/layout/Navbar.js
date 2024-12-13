@@ -6,7 +6,7 @@ const Navbar = () => {
   return (
     <nav className="flex justify-between w-full h-[80px] items-center lg:pl-10 lg:pr-10 pl-6 pr-6 shadow-lg sticky top-0 z-10 bg-white text-lg">
       <div className="text-[#ffcc00] font-bold lg:text-2xl text-xl tracking-wide">
-        <Link to="/">KomparAuto</Link>
+        <Link to="/">CompareAuto</Link>
       </div>
       <section className="hidden lg:block">
         <div
