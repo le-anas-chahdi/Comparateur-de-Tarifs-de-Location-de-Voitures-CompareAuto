@@ -1,0 +1,130 @@
+/* Style général du formulaire */
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #d6e9d7;
+}
+
+.auth-container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 700px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Le formulaire de connexion/inscription */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Les labels avec icône à gauche */
+.auth-form label {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.auth-form label .icon {
+    margin-right: 10px;
+    font-size: 20px; /* Taille des icônes */
+}
+
+/* Les champs de saisie */
+.auth-form input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+/* Affichage du bouton de soumission */
+button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Affichage des erreurs */
+.error {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+/* Changer l'état du bouton pour passer de Connexion à Inscription */
+.auth-toggle {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.auth-toggle button {
+    background: none;
+    color: #4CAF50;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.auth-toggle button.active {
+    color: #45a049;
+}
+
+
+/* Section pour la connexion avec Facebook */
+.facebook-login {
+    margin-top: 20px; /* Espacement entre le formulaire et le bouton Facebook */
+    text-align: center; /* Centrer le bouton */
+}
+
+.facebook-login button {
+    background-color: #4267B2; /* Couleur officielle de Facebook */
+    color: #fff; /* Couleur du texte */
+    border: none; /* Pas de bordure */
+    padding: 10px 20px; /* Espacement interne */
+    border-radius: 5px; /* Coins arrondis */
+    font-size: 16px; /* Taille du texte */
+    font-weight: bold; /* Texte en gras */
+    cursor: pointer; /* Curseur pointeur */
+    transition: background-color 0.3s ease; /* Animation au survol */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Ombre pour un effet de bouton */
+}
+
+.facebook-login button:hover {
+    background-color: #365899; /* Couleur légèrement plus foncée au survol */
+}
+
+.facebook-login button:active {
+    background-color: #2d4373; /* Couleur encore plus sombre lors du clic */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Réduction de l'ombre */
+}
+

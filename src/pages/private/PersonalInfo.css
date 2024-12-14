@@ -1,0 +1,59 @@
+.personal-info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    max-width: 700px;
+    margin: auto;
+}
+
+.personal-info {
+    width: 100%;
+}
+
+.personal-info label {
+    display: block;
+    margin: 10px 0;
+}
+
+.personal-info input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    margin-top: 20px;
+    padding: 10px 15px;
+    background-color: #089b0c; /* Vert */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #085008; /* Vert plus foncé */
+}
+
+/* Style pour les icônes */
+.personal-info p {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.personal-info i {
+    margin-right: 10px;
+    color: #272c28; /* Couleur des icônes */
+}
+
+h2 {
+    color: #4CAF50;
+    margin-bottom: 20px;
+}

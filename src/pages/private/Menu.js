@@ -16,18 +16,18 @@ const Menu = () => {
             // Déconnecter l'utilisateur via Firebase
             await auth.signOut();
             // Rediriger l'utilisateur vers la page d'accueil (WelcomePage)
-            navigate('/'); // Assurez-vous du bon chemin relatif
+            navigate('../MainPages/WelcomePage.js'); // Assurez-vous du bon chemin relatif
         } catch (error) {
             console.error("Erreur de déconnexion :", error);
         }
     };
 
     return (
-        <>
+        <div className="menu-container">
             <div className="menu-icon" onClick={toggleMenu}>
                 <i className="fas fa-bars"></i>
             </div>
-            <div className={`menu-container ${menuOpen ? 'open' : ''}`}>
+            {menuOpen && (
                 <div className="menu-content">
                     <div className="menu-item">
                         <Link to="/profile">Mon Profil</Link>
@@ -45,7 +45,7 @@ const Menu = () => {
                         <Link to="/subscriptions">Mes Abonnements</Link>
                     </div>
                     <div className="menu-item">
-                        <Link to="../comparison">Comparer les Tarifs</Link>
+                        <Link to="../components/ComparaisonForm.js">Comparer les Tarifs</Link>
                     </div>
 
                     {/* Ajout de l'élément Déconnexion */}
@@ -55,8 +55,8 @@ const Menu = () => {
                         </div>
                     </div>
                 </div>
-            </div>
-        </>// 1613061129585926  0da2722ab03d955721e08a013302a1ab https://comparetarifs-24a17.firebaseapp.com/__/auth/handler
+            )}
+        </div>// 1613061129585926  0da2722ab03d955721e08a013302a1ab https://comparetarifs-24a17.firebaseapp.com/__/auth/handler
     );
 };
 

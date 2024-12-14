@@ -1,0 +1,98 @@
+/* Conteneur principal */
+.subscription-container {
+    display: flex; 
+    flex-direction: column; /* Dispose le contenu en colonne */
+    justify-content: center; /* Centre le contenu verticalement */
+    align-items: center; /* Centre le contenu horizontalement */
+    height: 100vh; /* Prend toute la hauteur de l'écran */
+    background-color: #f9f9f9;
+    padding: 20px;
+    box-sizing: border-box;
+    width: 100%; /* Prend toute la largeur de la fenêtre */
+    position: relative; /* Positionnement relatif pour un meilleur contrôle */
+}
+
+/* Titre principal */
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+/* Options d'abonnement (les boutons) */
+.subscription-options {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.subscription-options button {
+    background-color: #dbc76e;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.subscription-options button:hover {
+    background-color: #bca259;
+}
+
+/* Message de confirmation après sélection */
+.subscription-message {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 16px;
+    color: #4caf50;
+}
+
+/* Section de tarifs des services de location de voiture */
+.car-rental-pricing {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Colonne fluide */
+    gap: 20px;
+    width: 100%; /* Utilise toute la largeur de l'écran */
+    max-width: 1200px; /* Limite la largeur maximale */
+    margin-top: 30px;
+}
+
+/* Cartes de tarifs */
+.rental-card {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.rental-card h3 {
+    text-align: center;
+    color: #555;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.rental-card ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.rental-card li {
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.rental-card li:last-child {
+    border-bottom: none;
+}
+
+.rental-card strong {
+    color: #333;
+}

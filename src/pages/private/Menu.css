@@ -1,99 +1,65 @@
-/* Menu Icon */
-.menu-icon {
-    font-size: 24px;
-    cursor: pointer;
-    position: absolute;
-    top: 85px; /* Below the navbar; adjust as needed */
-    margin: 30px auto;
-    color: #2b0000;
-    z-index: 1001; /* Ensure it stays above other elements */
-}
-
-/* Menu Container */
 .menu-container {
     position: fixed;
-    top: 60px; /* Start below the navbar; adjust based on navbar height */
+    top: 0;
     left: 0;
-    width: 240px; /* Adjust menu width */
-    height: calc(100% - 60px); /* Full height minus navbar height */
+    width: 200px;
+    height: 100%;
     background-color: #9be98c;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
     z-index: 1000;
-    padding-top: 20px; /* Extra spacing for menu items */
-    transform: translateX(-100%); /* Hidden by default */
-    transition: transform 0.3s ease; /* Smooth slide effect */
+    padding-top: 20px; /* Décale l'ensemble du menu vers le bas */
 }
 
-/* Show Menu when 'open' class is added */
-.menu-container.open {
-    transform: translateX(0); /* Slide in */
+
+.menu-icon {
+    font-size: 24px;
+    cursor: pointer;
+    margin: 30px auto; /* Centrer l'icône horizontalement */
+    color: #2b0000;
 }
 
-/* Menu Content */
 .menu-content {
-    flex-grow: 1; /* Take available space */
+    flex-grow: 1; /* Laisser les items prendre tout l'espace disponible */
     display: flex;
     flex-direction: column;
-    padding: 100px 10px 10px; /* Adjust padding for spacing */
-    align-items: flex-start; /* Center menu items horizontally */
+    padding: 10px 0;
+    margin-top: 50px; /* Décale les items de menu vers le bas */
 }
 
-/* Menu Item */
+
 .menu-item {
     padding: 15px 20px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Light separator */
-    transition: background-color 0.3s ease; /* Smooth hover animation */
-    text-align: center; /* Center menu item text */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Ligne de séparation légère */
+    transition: background-color 0.3s ease; /* Animation pour hover */
 }
 
 .menu-item:last-child {
-    border-bottom: none;
+    border-bottom: none; /* Pas de bordure pour le dernier élément */
 }
 
 .menu-item a {
-    text-decoration: none; /* Remove underline */
-    color: #000000; /* Base color */
+    text-decoration: none; /* Retirer le soulignement */
+    color: #000000; /* Couleur de base */
     font-size: 16px;
     font-weight: 500;
 }
 
 .menu-item:hover {
-    background-color: #d8d0d0; /* Hover background color */
+    background-color: #d8d0d0; /* Changer la couleur de fond au survol */
 }
 
 .menu-item a:hover {
-    color: #9eca6c; /* Hover text color */
+    color: #9eca6c; /* Changer la couleur du texte au survol */
 }
 
-/* Menu Footer */
 .menu-footer {
-    position: absolute; /* Position relative to the menu container */
-    bottom: 50px; /* Raise the footer slightly higher */
-    left: 50%; /* Center horizontally */
-    transform: translateX(-50%); /* Perfect horizontal centering */
-    padding: 15px 15px;
+    margin-top: auto; /* Placer le footer en bas */
+    padding: 15px 20px;
     background-color: #db0a0a;
     text-align: center;
     font-size: 14px;
     color: #9eca6c;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
-    width: 80%; /* Adjust width for consistent centering */
-}
-
-.menu-item.logout {
-    border: none; /* Remove default button border */
-    background: none; /* Transparent background */
-    cursor: pointer; /* Indicate it's clickable */
-    font-size: 20px;
-    font-weight: 500;
-    color: #000000;
-    text-align: center;
-    transition: background-color 0.3s ease;
-    display: block; /* Ensure it behaves like a block element */
-}
-
-.menu-item.logout:hover {
-    color: #9eca6c;
 }
